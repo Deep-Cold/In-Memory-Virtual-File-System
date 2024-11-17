@@ -4,26 +4,18 @@ import Disk.*;
 import Criteria.*;
 import Document.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class Operator_Base {
-    private Operation op;
-    Operator_Base() {
-        this.op = null;
-    }
+    private final Operation op;
     Operator_Base(Operation op) {
         this.op = op;
     }
-    public Operation getOp() {
-        return op;
-    }
-    public void setOp(Operation op) {
-        this.op = op;
-    }
 
-    public abstract void runCommand();
+    public abstract void runCommand() throws IOException;
 
     public static void errInput() {
         throw new IllegalArgumentException("The input format is incorrect.");
@@ -31,6 +23,32 @@ public abstract class Operator_Base {
 
     public static void memExceed() {
         throw new IllegalArgumentException("The memory is not enough.");
+    }
+
+    public static Operator_Base getOperator(String str) {
+        Operation op = Operation.fromString(str.split(" ")[0]);
+        return switch (op) {
+            case newDisk -> OpNewDisk.fromString(str);
+            case newDoc -> OpNewDoc.fromString(str);
+            case newDir -> OpNewDir.fromString(str);
+            case delete -> OpDelete.fromString(str);
+            case rename -> OpRename.fromString(str);
+            case changeDir -> OpChangeDir.fromString(str);
+            case list -> OpList.fromString(str);
+            case rList -> OpRList.fromString(str);
+            case newSimpleCri -> OpNewSimpleCri.fromString(str);
+            case newBinary -> OpNewBinary.fromString(str);
+            case newNegation -> OpNewNegation.fromString(str);
+            case printAllCriteria -> OpPrintAllCriteria.fromString(str);
+            case search -> OpSearch.fromString(str);
+            case rSearch -> OpRSearch.fromString(str);
+            case save -> OpSave.fromString(str);
+            case load -> OpLoad.fromString(str);
+            case undo -> OpUndo.fromString(str);
+            case redo -> OpRedo.fromString(str);
+            case quit -> OpQuit.fromString(str);
+            case null -> throw new IllegalArgumentException("Invalid operation");
+        };
     }
 }
 
@@ -48,7 +66,6 @@ class OpNewDisk extends Operator_Base {
     public static OpNewDisk fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newDisk) errInput();
         int siz = Integer.parseInt(elem[1]);
         if(siz < 0) errInput();
         return new OpNewDisk(Operation.newDisk, siz);
@@ -56,26 +73,28 @@ class OpNewDisk extends Operator_Base {
 }
 
 class OpNewDoc extends RedoOperator {
-    private final String fileName, fileType, fileContent;
-    OpNewDoc(Operation op, String fileName, String fileType, String fileContent) {
+    private final String fileName, fileContent;
+    private final Document.docTypes docType;
+    OpNewDoc(Operation op, String fileName, Document.docTypes docType, String fileContent) {
         super(op);
         this.fileName = fileName;
-        this.fileType = fileType;
+        this.docType = docType;
         this.fileContent = fileContent;
     }
 
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
-        Document nDoc = new Document(fileName, fileType, fileContent, dir);
+        Document nDoc = new Document(fileName, docType, fileContent, dir);
         if(nDoc.getSize() > Disk.getDisk().getRemSiz()) memExceed();
         dir.addFile(nDoc);
     }
 
-    public OpNewDoc fromString(String str) {
+    public static OpNewDoc fromString(String str) {
         String[] elem = str.split(" ");
-        if(elem.length != 3) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newDoc) errInput();
-        return new OpNewDoc(Operation.fromString(elem[0]), elem[1], elem[2], fileContent);
+        if(elem.length != 4) errInput();
+        Document.docTypes docType = Document.docTypes.fromString(elem[2]);
+        if(docType == null) errInput();
+        return new OpNewDoc(Operation.newDoc, elem[1], docType, elem[3]);
     }
 
     public ArrayList<Operator_Base> getReverse() {
@@ -102,7 +121,6 @@ class OpNewDir extends RedoOperator {
     public static OpNewDir fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newDir) errInput();
         return new OpNewDir(Operation.newDir, elem[1]);
     }
 
@@ -123,16 +141,15 @@ class OpDelete extends RedoOperator {
         Directory dir = Disk.getDisk().getCurDir();
         dir.delFile(fileName);
     }
-    public OpDelete fromString(String str) {
+    public static OpDelete fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.delete) errInput();
         return new OpDelete(Operation.delete, elem[1]);
     }
     public ArrayList<Operator_Base> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement cur = dir.getFileByName(fileName);
-        ArrayList<Operator_Base> ret = new ArrayList<Operator_Base>();
+        ArrayList<Operator_Base> ret = new ArrayList<>();
         if(cur == null) errInput();
         if(cur instanceof Directory) {
             List<FileSystemElement> elems = ((Directory) cur).getAllFiles();
@@ -141,12 +158,12 @@ class OpDelete extends RedoOperator {
                     ret.add(new OpNewDir(Operation.newDir, elem.getName()));
                 }
                 else if(elem instanceof Document) {
-                    ret.add(new OpNewDoc(Operation.newDoc, elem.getName(), ((Document) elem).getType(), ((Document) elem).getContent()));
+                    ret.add(new OpNewDoc(Operation.newDoc, elem.getName(), ((Document) elem).getDocType(), ((Document) elem).getContent()));
                 }
             }
         }
         else if(cur instanceof Document) {
-            ret.add(new OpNewDoc(Operation.newDoc, cur.getName(), ((Document) cur).getType(), ((Document) cur).getContent()));
+            ret.add(new OpNewDoc(Operation.newDoc, cur.getName(), ((Document) cur).getDocType(), ((Document) cur).getContent()));
         }
         return ret;
     }
@@ -166,7 +183,6 @@ class OpRename extends RedoOperator {
     public static OpRename fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 3) errInput();
-        if(Operation.fromString(elem[0]) != Operation.rename) errInput();
         return new OpRename(Operation.rename, elem[1], elem[2]);
     }
     public ArrayList<Operator_Base> getReverse() {
@@ -184,13 +200,15 @@ class OpChangeDir extends RedoOperator {
     }
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
-        if(Objects.equals(dirName, "..")) Disk.getDisk().setCurDir(dir.getParent());
-        else Disk.getDisk().setCurDir((Directory) dir.getFileByName(dirName));
+        FileSystemElement nDir;
+        if(Objects.equals(dirName, "..")) nDir = dir.getParent();
+        else nDir = dir.getFileByName(dirName);
+        if(nDir == null || nDir instanceof Document) errInput();
+        Disk.getDisk().setCurDir((Directory) nDir);
     }
     public static OpChangeDir fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.changeDir) errInput();
         return new OpChangeDir(Operation.changeDir, elem[1]);
     }
     public ArrayList<Operator_Base> getReverse() {
@@ -209,10 +227,9 @@ class OpList extends Operator_Base {
         Directory dir = Disk.getDisk().getCurDir();
         dir.listFiles();
     }
-    public OpList fromString(String str) {
+    public static OpList fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.list) errInput();
         return new OpList(Operation.list);
     }
 }
@@ -228,7 +245,6 @@ class OpRList extends Operator_Base {
     public static OpRList fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.rList) errInput();
         return new OpRList(Operation.rList);
     }
 }
@@ -256,10 +272,9 @@ class OpNewSimpleCri extends CriteriaOperator {
     public static OpNewSimpleCri fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 5) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newSimpleCri) errInput();
         Criteria.AttrName attrName = Criteria.AttrName.fromString(elem[2]);
         Op op = Op.fromString(elem[3]);
-        if(!Criteria.checkName(elem[1])) errInput();
+        if(Criteria.checkName(elem[1])) errInput();
         switch(attrName) {
             case null:
                 errInput();
@@ -283,11 +298,14 @@ class OpNewSimpleCri extends CriteriaOperator {
         }
         return new OpNewSimpleCri(Operation.newSimpleCri, elem[1], attrName, op, elem[4]);
     }
+    public String toString() {
+        return "newSimpleCri " + criName + " " + attrName + " " + criOp + " \"" + val + "\"\n";
+    }
 }
 
 class OpNewNegation extends CriteriaOperator {
     String criName1, criName2;
-    OpNewNegation(Operation op, String attrName1, String attrName2) {
+    OpNewNegation(Operation op, String criName1, String criName2) {
         super(op);
         this.criName1 = criName1;
         this.criName2 = criName2;
@@ -305,9 +323,11 @@ class OpNewNegation extends CriteriaOperator {
     public static OpNewNegation fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 3) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newNegation) errInput();
-        if(!Criteria.checkName(elem[1])) errInput();
+        if(Criteria.checkName(elem[1])) errInput();
         return new OpNewNegation(Operation.newNegation, elem[1], elem[2]);
+    }
+    public String toString() {
+        return "newNegation " + criName1 + " " + criName2 + "\n";
     }
 }
 
@@ -334,11 +354,13 @@ class OpNewBinary extends CriteriaOperator {
     public static OpNewBinary fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 5) errInput();
-        if(Operation.fromString(elem[0]) != Operation.newBinary) errInput();
         LogicOp logicOp = LogicOp.fromString(elem[3]);
         if(logicOp == null) errInput();
-        if(!Criteria.checkName(elem[1])) errInput();
+        if(Criteria.checkName(elem[1])) errInput();
         return new OpNewBinary(Operation.newBinary, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
+    }
+    public String toString() {
+        return "newBinary " + criName1 + " " + criName3 + " " + logicOp + " " + criName4 + "\n";
     }
 }
 
@@ -353,38 +375,45 @@ class OpPrintAllCriteria extends Operator_Base {
     public static OpPrintAllCriteria fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.printAllCriteria) errInput();
         return new OpPrintAllCriteria(Operation.printAllCriteria);
     }
 }
 
 class OpSearch extends Operator_Base {
-    private final Criteria.AttrName attrName;
-    OpSearch(Operation op, Criteria.AttrName attrName) {
+    private final String criName;
+    OpSearch(Operation op, String criName) {
         super(op);
-        this.attrName = attrName;
+        this.criName = criName;
     }
-    public void runCommand() {}
+    public void runCommand() {
+        Disk disk = Disk.getDisk();
+        Criteria cri = disk.searchCriteria(criName);
+        if(cri == null) errInput();
+        disk.getCurDir().searchFiles(cri);
+    }
     public static OpSearch fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.search) errInput();
-        return new OpSearch(Operation.search, Criteria.AttrName.fromString(elem[1]));
+        return new OpSearch(Operation.search, elem[1]);
     }
 }
 
 class OpRSearch extends Operator_Base {
-    Criteria.AttrName attrName;
-    OpRSearch(Operation op, Criteria.AttrName attrName) {
+    String criName;
+    OpRSearch(Operation op, String criName) {
         super(op);
-        this.attrName = attrName;
+        this.criName = criName;
     }
-    public void runCommand() {}
+    public void runCommand() {
+        Disk disk = Disk.getDisk();
+        Criteria cri = disk.searchCriteria(criName);
+        if(cri == null) errInput();
+        disk.getCurDir().rSearchFiles(cri);
+    }
     public static OpRSearch fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.rSearch) errInput();
-        return new OpRSearch(Operation.rSearch, Criteria.AttrName.fromString(elem[1]));
+        return new OpRSearch(Operation.rSearch, elem[1]);
     }
 }
 
@@ -394,11 +423,13 @@ class OpSave extends Operator_Base {
         super(op);
         this.path = path;
     }
-    public void runCommand() {}
+    public void runCommand() throws IOException {
+        Disk disk = Disk.getDisk();
+        disk.save(path);
+    }
     public static OpSave fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.save) errInput();
         return new OpSave(Operation.save, elem[1]);
     }
 }
@@ -409,11 +440,13 @@ class OpLoad extends Operator_Base {
         super(op);
         this.path = path;
     }
-    public void runCommand() {}
+    public void runCommand() throws IOException {
+        Disk disk = Disk.getDisk();
+        disk.load(path);
+    }
     public static OpLoad fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        if(Operation.fromString(elem[0]) != Operation.load) errInput();
         return new OpLoad(Operation.load, elem[1]);
     }
 }
@@ -422,14 +455,13 @@ class OpUndo extends Operator_Base {
     OpUndo(Operation op) {
         super(op);
     }
-    public void runCommand() {
+    public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.undo();
     }
     public static OpUndo fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.undo) errInput();
         return new OpUndo(Operation.undo);
     }
 }
@@ -438,14 +470,13 @@ class OpRedo extends Operator_Base {
     OpRedo(Operation op) {
         super(op);
     }
-    public void runCommand() {
+    public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.redo();
     }
     public static OpRedo fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.redo) errInput();
         return new OpRedo(Operation.redo);
     }
 }
@@ -460,7 +491,6 @@ class OpQuit extends Operator_Base {
     public static OpQuit fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
-        if(Operation.fromString(elem[0]) != Operation.quit) errInput();
         return new OpQuit(Operation.quit);
     }
 }

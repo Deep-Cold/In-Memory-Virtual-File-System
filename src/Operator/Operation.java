@@ -1,5 +1,4 @@
 package Operator;
-import java.util.HashSet;
 
 public enum Operation {
 
@@ -7,18 +6,6 @@ public enum Operation {
     changeDir("changeDir"), list("list"), rList("rList"), newSimpleCri("newSimpleCri"), newNegation("newNegation"), newBinary("newBinary"), printAllCriteria("printAllCriteria"),
     search("search"), rSearch("rSearch"), save("save"), load("load"), quit("quit"), undo("undo"), redo("redo");
     private final String content;
-
-    private HashSet<String> pushOperations = new HashSet<String>();
-
-    {
-        pushOperations.add("newDoc");
-        pushOperations.add("newDir");
-        pushOperations.add("delete");
-        pushOperations.add("rename");
-        pushOperations.add("changeDir");
-        pushOperations.add("newSimpleCri");
-        pushOperations.add("newNegation");
-    }
 
     Operation(String content)
     {
@@ -38,4 +25,4 @@ public enum Operation {
         return null;
     }
 
-};
+}

@@ -1,7 +1,7 @@
 package Criteria;
 
 public class CriteriaIntValue extends CriteriaValue{
-    private int value;
+    private final int value;
 
     public CriteriaIntValue(int value){
         this.value = value;
@@ -13,6 +13,14 @@ public class CriteriaIntValue extends CriteriaValue{
     
     public String toString(){
         return String.valueOf(value);
+    }
+
+    public static CriteriaIntValue parse(String value){
+        return new CriteriaIntValue(Integer.parseInt(value));
+    }
+
+    public static CriteriaIntValue parse(int value){
+        return new CriteriaIntValue(value);
     }
 
     public boolean contains(String value){

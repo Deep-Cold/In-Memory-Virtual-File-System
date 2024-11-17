@@ -6,6 +6,14 @@ public enum LogicOp {
     LogicOp(String value){
         this.value = value;
     }
+    public static LogicOp fromString(String value){
+        for(LogicOp op : LogicOp.values()){
+            if(op.value.equals(value)){
+                return op;
+            }
+        }
+        return null;
+    }
     public String toString(){
         return value;
     }
