@@ -122,7 +122,7 @@ public class Disk {
 
     public void save(String path) throws IOException {
         File file = new File(path);
-        if(file.exists()) throw new IllegalArgumentException("File exists.");
+        // if(file.exists()) throw new IllegalArgumentException("File exists.");
         if(!file.exists()) file.createNewFile();
         FileOutputStream fileStream = new FileOutputStream(file);
         OutputStreamWriter output = new OutputStreamWriter(fileStream);
