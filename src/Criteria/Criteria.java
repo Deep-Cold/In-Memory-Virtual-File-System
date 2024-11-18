@@ -129,7 +129,7 @@ public class Criteria {
     @Override
     public boolean equals(Object o){
         if(o instanceof Criteria){
-            return name.equals(((Criteria)o).name);
+            return name.equals(((Criteria)o).getName());
         }
         return false;
     }

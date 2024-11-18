@@ -64,6 +64,7 @@ class OpNewDisk extends Operator_Base {
         this.siz = siz;
     }
 
+    @Override
     public void runCommand() {
         Disk.newDisk(siz);
     }
@@ -87,6 +88,7 @@ class OpNewDoc extends RedoOperator {
         this.fileContent = fileContent;
     }
 
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         Document nDoc = new Document(fileName, docType, fileContent, dir);
@@ -106,6 +108,7 @@ class OpNewDoc extends RedoOperator {
         return new OpNewDoc(Operation.newDoc, elem[1], docType, docContent);
     }
 
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, fileName));
@@ -120,6 +123,7 @@ class OpNewDir extends RedoOperator {
         this.dirName = dirName;
     }
 
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         Directory nDir = new Directory(dirName, dir);
@@ -133,6 +137,7 @@ class OpNewDir extends RedoOperator {
         return new OpNewDir(Operation.newDir, elem[1]);
     }
 
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, dirName));
@@ -146,6 +151,7 @@ class OpDelete extends RedoOperator {
         super(op);
         this.fileName = fileName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.delFile(fileName);
@@ -155,6 +161,7 @@ class OpDelete extends RedoOperator {
         if(elem.length != 2) errInput();
         return new OpDelete(Operation.delete, elem[1]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement cur = dir.getFileByName(fileName);
@@ -185,6 +192,7 @@ class OpRename extends RedoOperator {
         this.oldName = oldName;
         this.newName = newName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.renameFile(oldName, newName);
@@ -194,6 +202,7 @@ class OpRename extends RedoOperator {
         if(elem.length != 3) errInput();
         return new OpRename(Operation.rename, elem[1], elem[2]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpRename(Operation.rename, newName, oldName));
@@ -207,6 +216,7 @@ class OpChangeDir extends RedoOperator {
         super(op);
         this.dirName = dirName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement nDir;
@@ -220,6 +230,7 @@ class OpChangeDir extends RedoOperator {
         if(elem.length != 2) errInput();
         return new OpChangeDir(Operation.changeDir, elem[1]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         ArrayList<Operator_Base> cur = new ArrayList<>();
@@ -232,6 +243,7 @@ class OpList extends Operator_Base {
     OpList(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.listFiles();
@@ -247,6 +259,7 @@ class OpRList extends Operator_Base {
     OpRList(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.rListFiles();
@@ -269,9 +282,11 @@ class OpNewSimpleCri extends CriteriaOperator {
         this.attrName = attr;
         this.val = val;
     }
+    @Override
     public String getName() {
         return criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(attrName != Criteria.AttrName.Size)
@@ -314,15 +329,17 @@ class OpNewSimpleCri extends CriteriaOperator {
 }
 
 class OpNewNegation extends CriteriaOperator {
-    String criName1, criName2;
+    private final String criName1, criName2;
     OpNewNegation(Operation op, String criName1, String criName2) {
         super(op);
         this.criName1 = criName1;
         this.criName2 = criName2;
     }
+    @Override
     public String getName() {
         return criName1;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(disk.searchCriteria(criName1) != null) errInput();
@@ -351,9 +368,11 @@ class OpNewBinaryCri extends CriteriaOperator {
         this.logicOp = logicOp;
         this.criName4 = attr4;
     }
+    @Override
     public String getName() {
         return criName1;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(disk.searchCriteria(criName1) != null) errInput();
@@ -378,6 +397,7 @@ class OpPrintAllCriteria extends Operator_Base {
     OpPrintAllCriteria(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         disk.printAllCriteria();
@@ -395,6 +415,7 @@ class OpSearch extends Operator_Base {
         super(op);
         this.criName = criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         Criteria cri = disk.searchCriteria(criName);
@@ -409,11 +430,12 @@ class OpSearch extends Operator_Base {
 }
 
 class OpRSearch extends Operator_Base {
-    String criName;
+    private final String criName;
     OpRSearch(Operation op, String criName) {
         super(op);
         this.criName = criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         Criteria cri = disk.searchCriteria(criName);
@@ -433,6 +455,7 @@ class OpSave extends Operator_Base {
         super(op);
         this.path = path;
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.save(path);
@@ -450,6 +473,7 @@ class OpLoad extends Operator_Base {
         super(op);
         this.path = path;
     }
+    @Override
     public void runCommand() throws IOException {
         Disk.load(path);
     }
@@ -464,6 +488,7 @@ class OpUndo extends Operator_Base {
     OpUndo(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.undo();
@@ -479,6 +504,7 @@ class OpRedo extends Operator_Base {
     OpRedo(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.redo();
@@ -494,6 +520,7 @@ class OpQuit extends Operator_Base {
     OpQuit(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         System.exit(0);
     }

@@ -8,7 +8,7 @@ import Criteria.*;
 import Document.Document;
 import Operator.*;
 
-public class Disk {
+public final class Disk {
 
     private final int diskSize;
     private final Directory rootDir;
@@ -161,7 +161,7 @@ public class Disk {
             Operator_Base curOp = Operator_Base.getOperator(command);
             curOp.runCommand();
             if(curOp instanceof CriteriaOperator) {
-                getDisk().criList.add(((CriteriaOperator) curOp));
+                getDisk().getCriList().add(((CriteriaOperator) curOp));
             }
         }
         reader.close();
@@ -170,5 +170,9 @@ public class Disk {
 
     public int getRemSiz() {
         return diskSize - rootDir.getSize();
+    }
+
+    public ArrayList<CriteriaOperator> getCriList() {
+        return criList;
     }
 }

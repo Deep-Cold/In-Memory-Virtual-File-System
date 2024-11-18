@@ -8,7 +8,7 @@ public enum LogicOp {
     }
     public static LogicOp fromString(String value){
         for(LogicOp op : LogicOp.values()){
-            if(op.value.equals(value)){
+            if(op.toString().equals(value)){
                 return op;
             }
         }

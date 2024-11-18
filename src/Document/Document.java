@@ -36,10 +36,12 @@ public class Document implements FileSystemElement {
         setName(name);
     }
 
+    @Override
     public String getName(){
         return docName;
     }
 
+    @Override
     public void setName(String name) {
         if (this.parent != null)
             if (this.parent.getFileByName(name) != null) {
@@ -60,18 +62,22 @@ public class Document implements FileSystemElement {
     }
 
 
+    @Override
     public int getSize(){
         return 40 + docContent.length() * 2;
     }
 
+    @Override
     public Directory getParent() {
         return parent;
     }
 
+    @Override
     public void setParent(Directory parent) {
         this.parent = parent;
     }
 
+    @Override
     public String getType(){
         return docType.toString();
     }
@@ -84,6 +90,7 @@ public class Document implements FileSystemElement {
         return docContent;
     }
 
+    @Override
     public void printInfo() {
         System.out.println(docName + " " + getType() + " " + getContent());
     }

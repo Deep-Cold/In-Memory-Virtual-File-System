@@ -1,12 +1,13 @@
 package Criteria;
 
-public class CriteriaIntValue extends CriteriaValue{
+public class CriteriaIntValue implements CriteriaValue{
     private final int value;
 
     public CriteriaIntValue(int value){
         this.value = value;
     }
 
+    @Override
     public int getValue(){
         return value;
     }
@@ -23,6 +24,7 @@ public class CriteriaIntValue extends CriteriaValue{
         return new CriteriaIntValue(value);
     }
 
+    @Override
     public boolean contains(String value){
         return false;
     }

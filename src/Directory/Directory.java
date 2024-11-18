@@ -31,6 +31,7 @@ public class Directory implements FileSystemElement {
         this.files = new ArrayList<>();
         this.parent = parent;
     }
+    @Override
     public String getType() {
         return "Directory";
     }
