@@ -4,8 +4,9 @@
 
 1. [Introduction](#introduction)
 2. [Getting Started](#getting-started)
+   - [Downloading the Project](#downloading-the-project)
+   - [Running the CVFS Program](#running-the-cvfs-program)
    - [Creating a New Disk](#creating-a-new-disk)
-   - [Navigating the File System](#navigating-the-file-system)
 3. [File and Directory Operations](#file-and-directory-operations)
    - [Creating Documents](#creating-documents)
    - [Creating Directories](#creating-directories)
@@ -58,9 +59,7 @@ The CVFS is a virtual disk management system that allows users to simulate a fil
 
 ## Getting Started
 
-## Downloading the Project and Running the CVFS Program
-
-**Clone the Repository**
+### Downloading the Project
 
 If you have not downloaded the CVFS project yet, you can clone it from GitHub using the following command:
 
@@ -69,6 +68,8 @@ git clone https://github.com/Deep-Cold/In-Memory-Virtual-File-System
 ```
 
 This command will create a directory named `In-Memory-Virtual-File-System` in your current directory, containing all the project files.
+
+### Running the CVFS Program
 
 **Navigate to the Project Directory**
 
@@ -524,7 +525,7 @@ save path
 **Example:**
 
 ```
-save test.txt
+save test
 ```
 
 **Effect:**
@@ -548,7 +549,7 @@ load path
 **Example:**
 
 ```
-load test.txt
+load test
 ```
 
 **Effect:**
