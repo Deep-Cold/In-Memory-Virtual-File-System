@@ -42,7 +42,7 @@ public abstract class Operator_Base {
             case list -> OpList.fromString(str);
             case rList -> OpRList.fromString(str);
             case newSimpleCri -> OpNewSimpleCri.fromString(str);
-            case newBinary -> OpNewBinary.fromString(str);
+            case newBinary -> OpNewBinaryCri.fromString(str);
             case newNegation -> OpNewNegation.fromString(str);
             case printAllCriteria -> OpPrintAllCriteria.fromString(str);
             case search -> OpSearch.fromString(str);
@@ -341,10 +341,10 @@ class OpNewNegation extends CriteriaOperator {
     }
 }
 
-class OpNewBinary extends CriteriaOperator {
+class OpNewBinaryCri extends CriteriaOperator {
     private final String criName1, criName3, criName4;
     private final LogicOp logicOp;
-    OpNewBinary(Operation op, String attr1, String attr3, LogicOp logicOp, String attr4) {
+    OpNewBinaryCri(Operation op, String attr1, String attr3, LogicOp logicOp, String attr4) {
         super(op);
         this.criName1 = attr1;
         this.criName3 = attr3;
@@ -361,13 +361,13 @@ class OpNewBinary extends CriteriaOperator {
         if(ori1 == null || ori2 == null) errInput();
         disk.addCriteria(new Criteria(criName1, ori1, logicOp, ori2));
     }
-    public static OpNewBinary fromString(String str) {
+    public static OpNewBinaryCri fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 5) errInput();
         LogicOp logicOp = LogicOp.fromString(elem[3]);
         if(logicOp == null) errInput();
         if(Criteria.checkName(elem[1])) errInput();
-        return new OpNewBinary(Operation.newBinary, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
+        return new OpNewBinaryCri(Operation.newBinary, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
     }
     public String toString() {
         return "newBinaryCri " + criName1 + " " + criName3 + " " + logicOp + " " + criName4 + "\n";
