@@ -33,9 +33,7 @@ public class Criteria {
     private AttrName attrName;
     private Op op;
     private CriteriaValue value;
-    public AttrName getAttrName() {
-        return attrName;
-    }
+
     public Criteria(String name, AttrName attrName, Op op, CriteriaValue value){
         this.name = name;
         this.attrName = attrName;
