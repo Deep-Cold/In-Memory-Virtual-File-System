@@ -452,8 +452,7 @@ class OpLoad extends Operator_Base {
         this.path = path;
     }
     public void runCommand() throws IOException {
-        Disk disk = Disk.getDisk();
-        disk.load(path);
+        Disk.load(path);
     }
     public static OpLoad fromString(String str) {
         String[] elem = str.split(" ");
