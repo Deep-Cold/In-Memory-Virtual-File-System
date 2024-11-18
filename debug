@@ -1,0 +1,9 @@
+newDisk 114514
+newDir 1919810
+changeDir 1919810
+newDoc 19260817 txt 8964
+changeDir ..
+newSimpleCri aa type equals "java"
+newSimpleCri ab size >= 2
+newNegation na aa
+newNegation nb ab

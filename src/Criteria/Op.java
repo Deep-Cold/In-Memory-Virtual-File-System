@@ -1,7 +1,7 @@
 package Criteria;
 import java.util.HashSet;
 public enum Op {
-    Contain("contains"), NotContain("doesn't contain"), Equal("equals"), NotEqual("doesn't equal"), Greater(">"), LessEqual("<="), Less("<"), GreaterEqual(">="), sizeEqual("=="), sizeNotEqual("!=");
+    Contain("contains"), NotContain("\"doesn't contain\""), Equal("equals"), NotEqual("\"doesn't equal\""), Greater(">"), LessEqual("<="), Less("<"), GreaterEqual(">="), sizeEqual("=="), sizeNotEqual("!=");
     private final String value;
     private final static HashSet<Op> ariOps = new HashSet<Op>();
     static {

@@ -66,7 +66,7 @@ public class Criteria {
     }
     public String getCriteria(){
         if(isSimple)
-            return attrName + " " + op.ordinal() + " " + value;
+            return attrName + " " + op + " " + value;
         if(logicOp != LogicOp.NOT)
             return "(" + left.getCriteria() + ") " + logicOp + " (" + right.getCriteria() + ")";
         return left.getNegation();

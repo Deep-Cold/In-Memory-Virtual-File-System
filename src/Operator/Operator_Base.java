@@ -310,7 +310,8 @@ class OpNewSimpleCri extends CriteriaOperator {
         return new OpNewSimpleCri(Operation.newSimpleCri, elem[1], attrName, op, elem[4]);
     }
     public String toString() {
-        return "newSimpleCri " + criName + " " + attrName + " " + criOp + " \"" + val + "\"\n";
+        String quote = attrName == Criteria.AttrName.Name || attrName == Criteria.AttrName.Type ? "\"" : "";
+        return "newSimpleCri " + criName + " " + attrName + " " + criOp + quote + val + quote;
     }
 }
 
@@ -329,7 +330,7 @@ class OpNewNegation extends CriteriaOperator {
         if(disk.searchCriteria(criName1) != null) errInput();
         Criteria ori = disk.searchCriteria(criName2);
         if(ori == null) errInput();
-        disk.addCriteria(new Criteria(criName1, null, ori));
+        disk.addCriteria(new Criteria(criName1, LogicOp.NOT, ori));
     }
     public static OpNewNegation fromString(String str) {
         String[] elem = str.split(" ");
