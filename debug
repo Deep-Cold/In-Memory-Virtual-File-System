@@ -4,9 +4,3 @@ changeDir 1919810
 newDoc 19260817 txt 8964
 changeDir ..
 newDoc nmsl java fku
-newSimpleCri aa type equals "java"
-newSimpleCri ab size >= 2
-newSimpleCri ac type equals "txt"
-newNegation na aa
-newNegation nb ab
-newNegation nc ac

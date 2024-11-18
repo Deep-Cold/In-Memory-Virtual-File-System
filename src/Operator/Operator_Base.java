@@ -308,7 +308,7 @@ class OpNewSimpleCri extends CriteriaOperator {
         return new OpNewSimpleCri(Operation.newSimpleCri, elem[1], attrName, op, elem[4]);
     }
     public String toString() {
-        String quote = attrName == Criteria.AttrName.Name || attrName == Criteria.AttrName.Type ? "\"" : "";
+        String quote = ((attrName == Criteria.AttrName.Name || attrName == Criteria.AttrName.Type) ? "\"" : "");
         return "newSimpleCri " + criName + " " + attrName + " " + criOp + ' ' + quote + val + quote + '\n';
     }
 }
@@ -370,7 +370,7 @@ class OpNewBinary extends CriteriaOperator {
         return new OpNewBinary(Operation.newBinary, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
     }
     public String toString() {
-        return "newBinary " + criName1 + " " + criName3 + " " + logicOp + " " + criName4 + "\n";
+        return "newBinaryCri " + criName1 + " " + criName3 + " " + logicOp + " " + criName4 + "\n";
     }
 }
 
