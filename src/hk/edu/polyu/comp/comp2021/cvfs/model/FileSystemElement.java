@@ -1,4 +1,4 @@
-package Directory;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 
 /**
  * Fundamental file system element

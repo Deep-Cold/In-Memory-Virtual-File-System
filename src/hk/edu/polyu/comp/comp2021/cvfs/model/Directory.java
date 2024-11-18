@@ -1,8 +1,7 @@
-package Directory;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import Criteria.*;
 
 /**
  * Directory
@@ -13,21 +12,21 @@ public class Directory implements FileSystemElement {
      */
     public static final int TOTAL_SIZE = 40;
     /*
-     * Directory.Directory(String name, Directory.Directory parent): void
-     * addFile(Directory.FileSystemElement file): void
+     * hk.edu.polyu.comp.comp2021.cvfs.model.Directory(String name, hk.edu.polyu.comp.comp2021.cvfs.model.Directory parent): void
+     * addFile(hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement file): void
      * delFile(String name): void
-     * getFileByName(String name): Directory.FileSystemElement
+     * getFileByName(String name): hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement
      * renameFile(String oldName, String newName): void
      * listFiles(): void
      * rListFiles(): void
-     * getFiles(): List<Directory.FileSystemElement>
+     * getFiles(): List<hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement>
      * getName(): String
      * getSize(): int
      * setName(String name): void
      * validateName(String name): boolean
      * printInfo(): void
-     * getParent(): Directory.Directory
-     * setParent(Directory.Directory parent): void
+     * getParent(): hk.edu.polyu.comp.comp2021.cvfs.model.Directory
+     * setParent(hk.edu.polyu.comp.comp2021.cvfs.model.Directory parent): void
      */
     private String name;
     private final List<FileSystemElement> files;
@@ -50,7 +49,7 @@ public class Directory implements FileSystemElement {
     /**
      * @param file The file to be added in the Directory
      */
-    // Add a file(Directory.Document or Directory.Directory) to the directory.
+    // Add a file(Directory.Document or hk.edu.polyu.comp.comp2021.cvfs.model.Directory) to the directory.
     public void addFile(FileSystemElement file) {
         if (files.contains(file)) {
             throw new IllegalArgumentException("File already exists."); // Please catch exception in the caller. So does the following.

@@ -1,6 +1,4 @@
-package Document;
-
-import Directory.*;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 
 /**
  * Document

@@ -1,10 +1,7 @@
-package Operator;
-import org.junit.Before;
-import org.junit.Test;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
+import org.junit.*;
 
 import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class OperatorBaseTest {
     @Before
@@ -31,37 +28,37 @@ public class OperatorBaseTest {
     @Test
     public void testCriteria() throws IOException {
         Operator_Base testOp = Operator_Base.getOperator("newSimpleCri AA name contains \"txt\"");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newSimpleCri AB type equals \"java\"");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newSimpleCri AC type equals \"html\"");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newSimpleCri AD type equals \"txt\"");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newNegation NA AA");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newNegation NB AB");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newNegation NC AC");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newNegation ND AD");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newBinaryCri BA AA || AB");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newBinaryCri BB BA && AC");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
         testOp = Operator_Base.getOperator("newBinaryCri BC AA && AC");
-        assertTrue(testOp instanceof CriteriaOperator);
+        Assert.assertTrue(testOp instanceof CriteriaOperator);
         testOp.runCommand();
     }
 

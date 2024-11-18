@@ -1,7 +1,5 @@
-package Criteria;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 
-
-import Directory.FileSystemElement;
 
 /**
  *  Define the three types of Criteria

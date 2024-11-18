@@ -1,18 +1,8 @@
-package Operator;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import Criteria.Criteria;
-import Criteria.CriteriaIntValue;
-import Criteria.CriteriaStringValue;
-import Criteria.LogicOp;
-import Criteria.Op;
-import Directory.Directory;
-import Directory.FileSystemElement;
-import Disk.Disk;
-import Document.Document;
 
 /**
  * The Base of Operator

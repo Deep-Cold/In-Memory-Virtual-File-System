@@ -1,12 +1,7 @@
-package Disk;
-import Directory.*;
+package hk.edu.polyu.comp.comp2021.cvfs.model;
 
 import java.io.*;
 import java.util.*;
-
-import Criteria.*;
-import Document.Document;
-import Operator.*;
 
 /**
  * Disk
