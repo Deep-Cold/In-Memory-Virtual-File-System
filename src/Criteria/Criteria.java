@@ -8,7 +8,7 @@ public class Criteria {
     public Criteria(String s){
         this.name = s;
     }
-    boolean isSimple;
+    private boolean isSimple;
     private final String name;
 
     //Simple Criteria
@@ -74,6 +74,9 @@ public class Criteria {
         return left.getNegation();
     }
 
+    public void setSimple(boolean simple) {
+        isSimple = simple;
+    }
 
     private String getNegation() {
         if (isSimple) {

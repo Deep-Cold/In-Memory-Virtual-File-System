@@ -25,7 +25,9 @@ public class Disk {
         redoStack = new Stack<>();
         undoStack = new Stack<>();
         criList = new ArrayList<>();
-        this.addCriteria(new Criteria("IsDocument", Criteria.AttrName.Type, Op.NotEqual, CriteriaStringValue.parse("Directory")));
+        Criteria cri = new Criteria("IsDocument", Criteria.AttrName.Type, Op.NotEqual, CriteriaStringValue.parse("Directory"));
+        cri.setSimple(false);
+        this.addCriteria(cri);
     }
 
     public void addCriteria(Criteria criteria){
@@ -158,6 +160,9 @@ public class Disk {
         while((command = reader.readLine()) != null) {
             Operator_Base curOp = Operator_Base.getOperator(command);
             curOp.runCommand();
+            if(curOp instanceof CriteriaOperator) {
+                getDisk().criList.add(((CriteriaOperator) curOp));
+            }
         }
         reader.close();
         fileStream.close();

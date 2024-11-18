@@ -42,7 +42,7 @@ public abstract class Operator_Base {
             case list -> OpList.fromString(str);
             case rList -> OpRList.fromString(str);
             case newSimpleCri -> OpNewSimpleCri.fromString(str);
-            case newBinary -> OpNewBinaryCri.fromString(str);
+            case newBinaryCri -> OpNewBinaryCri.fromString(str);
             case newNegation -> OpNewNegation.fromString(str);
             case printAllCriteria -> OpPrintAllCriteria.fromString(str);
             case search -> OpSearch.fromString(str);
@@ -367,7 +367,7 @@ class OpNewBinaryCri extends CriteriaOperator {
         LogicOp logicOp = LogicOp.fromString(elem[3]);
         if(logicOp == null) errInput();
         if(Criteria.checkName(elem[1])) errInput();
-        return new OpNewBinaryCri(Operation.newBinary, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
+        return new OpNewBinaryCri(Operation.newBinaryCri, elem[1], elem[2], LogicOp.fromString(elem[3]), elem[4]);
     }
     public String toString() {
         return "newBinaryCri " + criName1 + " " + criName3 + " " + logicOp + " " + criName4 + "\n";

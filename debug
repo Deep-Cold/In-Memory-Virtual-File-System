@@ -4,3 +4,6 @@ changeDir 1919810
 newDoc 19260817 txt 8964
 changeDir ..
 newDoc nmsl java fku
+newSimpleCri ab size >= 2
+newSimpleCri ac type equals "txt"
+newBinaryCri ba ab && ac
