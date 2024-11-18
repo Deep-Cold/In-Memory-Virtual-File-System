@@ -1,13 +1,18 @@
 package Operator;
-import Directory.*;
-import Disk.*;
-import Criteria.*;
-import Document.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import Criteria.Criteria;
+import Criteria.CriteriaIntValue;
+import Criteria.CriteriaStringValue;
+import Criteria.LogicOp;
+import Criteria.Op;
+import Directory.Directory;
+import Directory.FileSystemElement;
+import Disk.Disk;
+import Document.Document;
 
 public abstract class Operator_Base {
     private final Operation op;
@@ -90,11 +95,17 @@ class OpNewDoc extends RedoOperator {
     }
 
     public static OpNewDoc fromString(String str) {
-        String[] elem = str.split(" ");
-        if(elem.length != 4) errInput();
+        String[] elem = str.split(" ", 4);
+        if (elem.length != 4) errInput();
         Document.docTypes docType = Document.docTypes.fromString(elem[2]);
-        if(docType == null) errInput();
-        return new OpNewDoc(Operation.newDoc, elem[1], docType, elem[3]);
+        if (docType == null) errInput();
+        
+        String docContent = elem[3];
+        if (docContent.startsWith("\"") && docContent.endsWith("\"") || docContent.startsWith("'") && docContent.endsWith("'")) {
+            docContent = docContent.substring(1, docContent.length() - 1);
+        }
+        
+        return new OpNewDoc(Operation.newDoc, elem[1], docType, docContent);
     }
 
     public ArrayList<Operator_Base> getReverse() {
