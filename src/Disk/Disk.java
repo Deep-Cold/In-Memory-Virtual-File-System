@@ -148,7 +148,7 @@ public class Disk {
         }
     }
 
-    public void load(String path) throws IOException {
+    public static void load(String path) throws IOException {
         File file = new File(path);
         if(!file.exists()) throw new IllegalArgumentException("File does not exists.");
         FileInputStream fileStream = new FileInputStream(file);
