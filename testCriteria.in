@@ -1,0 +1,11 @@
+newSimpleCri AA name contains "txt"
+newSimpleCri AB type equals "java"
+newSimpleCri AC type equals "html"
+newSimpleCri AD type equals "txt"
+newNegation NA AA
+newNegation NB AB
+newNegation NC AC
+newNegation ND AD
+newBinaryCri BA AA || AB
+newBinaryCri BB BA && AC
+newBinaryCri BC AA && AC

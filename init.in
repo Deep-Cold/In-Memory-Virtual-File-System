@@ -1,0 +1,9 @@
+newDisk 500
+newDir dir1
+newDir dir2
+newDoc txtfile txt "txt content"
+changeDir dir1
+newDoc htmlfile html "html content"
+changeDir ..
+changeDir dir2
+newDoc javafile java "java content"
