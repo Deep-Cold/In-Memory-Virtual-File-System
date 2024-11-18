@@ -54,6 +54,7 @@ public class Disk {
     }
 
     public static void newDisk(int siz) {
+        if(siz <= 0) throw new IllegalArgumentException("Size must be greater than zero.");
         root = new Disk(siz);
     }
 
