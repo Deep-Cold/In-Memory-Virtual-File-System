@@ -100,10 +100,7 @@ class OpNewDoc extends RedoOperator {
         Document.docTypes docType = Document.docTypes.fromString(elem[2]);
         if (docType == null) errInput();
         String docContent = elem[3];
-        if (docContent.startsWith("\"")) {
-            if (!docContent.endsWith("\"")) errInput();
-            docContent = docContent.substring(1, docContent.length() - 1);
-        } else if (docContent.contains(" ")) {
+        if (docContent.contains(" ") && !docContent.startsWith("\"")) {
             errInput();
         }
         return new OpNewDoc(Operation.newDoc, elem[1], docType, docContent);
