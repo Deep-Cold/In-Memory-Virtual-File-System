@@ -128,23 +128,20 @@ public class Directory implements FileSystemElement {
     }
 
     public void rSearchFiles(Criteria cri) {
-        int[] res = rSearchSol(0, cri);
+        int[] res = rSearchSol(cri);
         System.out.println("Total files: " + res[0] + ", Total size: " + res[1]);
     }
 
-    private int[] rSearchSol(int indent, Criteria cri) {
+    private int[] rSearchSol(Criteria cri) {
         int[] res = new int[]{0, 0};
         for (FileSystemElement file : files) {
-            for (int i = 0; i < indent; i++) {
-                System.out.print("    "); // Indentation
-            }
             if (file instanceof Directory dir) {
                 if (checkFile(cri, dir)) {
                     dir.printInfo();
                     res[0] ++;
                     res[1] += dir.getSize();
                 }
-                int[] childRes = dir.rSearchSol(indent + 1, cri);
+                int[] childRes = dir.rSearchSol(cri);
                 res[0] += childRes[0]; res[1] += childRes[1];
             }
             else if(checkFile(cri, file)) {
@@ -157,15 +154,16 @@ public class Directory implements FileSystemElement {
     }
 
     private boolean checkFile(Criteria cri, FileSystemElement file) {
-        if(cri.getAttrName() == Criteria.AttrName.Size) {
-            return cri.check(CriteriaIntValue.parse(file.getSize()));
-        }
-        else if(cri.getAttrName() == Criteria.AttrName.Name) {
-            return cri.check(CriteriaStringValue.parse(file.getName()));
-        }
-        else {
-            return cri.check(CriteriaStringValue.parse(file.getType()));
-        }
+//        if(cri.getAttrName() == Criteria.AttrName.Size) {
+//            return cri.check(CriteriaIntValue.parse(file.getSize()));
+//        }
+//        else if(cri.getAttrName() == Criteria.AttrName.Name) {
+//            return cri.check(CriteriaStringValue.parse(file.getName()));
+//        }
+//        else {
+//            return cri.check(CriteriaStringValue.parse(file.getType()));
+//        }
+        return cri.check(file);
     }
 
     // If the getter is not needed in other classes, please remove it.

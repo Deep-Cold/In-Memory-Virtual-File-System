@@ -3,7 +3,7 @@ package Operator;
 public enum Operation {
 
     newDisk("newDisk"), newDoc("newDoc"), newDir("newDir"), delete("delete"), rename("rename"),
-    changeDir("changeDir"), list("list"), rList("rList"), newSimpleCri("newSimpleCri"), newNegation("newNegation"), newBinary("newBinary"), printAllCriteria("printAllCriteria"),
+    changeDir("changeDir"), list("list"), rList("rList"), newSimpleCri("newSimpleCri"), newNegation("newNegation"), newBinary("newBinaryCri"), printAllCriteria("printAllCriteria"),
     search("search"), rSearch("rSearch"), save("save"), load("load"), quit("quit"), undo("undo"), redo("redo");
     private final String content;
 

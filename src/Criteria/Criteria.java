@@ -1,6 +1,8 @@
 package Criteria;
 
 
+import Directory.FileSystemElement;
+
 public class Criteria {
 
     public Criteria(String s){
@@ -82,36 +84,39 @@ public class Criteria {
         return left.getCriteria();
     }
 
-    public boolean check(CriteriaValue key){
+    public boolean check(FileSystemElement file){
         if(isSimple){
+            CriteriaStringValue sKey;
+            CriteriaIntValue iKey = CriteriaIntValue.parse(file.getSize());
             switch (attrName) {
                 case Name:
-                    return key.contains(value.toString());
+                    sKey = CriteriaStringValue.parse(file.getName());
+                    return sKey.contains(value.toString());
                 case Type:
-                    if(op == Op.NotEqual) return !key.equals(value);
-                    return key.equals(value);
+                    sKey = CriteriaStringValue.parse(file.getType());
+                    return sKey.equals(value);
                 case Size:
                     switch(op){
                         case Equal:
-                            return key.getValue() == value.getValue();
+                            return iKey.getValue() == value.getValue();
                         case NotEqual:
-                            return key.getValue() != value.getValue();
+                            return iKey.getValue() != value.getValue();
                         case Greater:
-                            return key.getValue() > value.getValue();
+                            return iKey.getValue() > value.getValue();
                         case LessEqual:
-                            return key.getValue() <= value.getValue();
+                            return iKey.getValue() <= value.getValue();
                         case Less:
-                            return key.getValue() < value.getValue();
+                            return iKey.getValue() < value.getValue();
                         case GreaterEqual:
-                            return key.getValue() >= value.getValue();
+                            return iKey.getValue() >= value.getValue();
                     }
             }
         }
         if(logicOp == LogicOp.AND)
-            return left.check(key) && right.check(key);
+            return left.check(file) && right.check(file);
         if(logicOp == LogicOp.OR)
-            return left.check(key) || right.check(key);
-        return !left.check(key);
+            return left.check(file) || right.check(file);
+        return !left.check(file);
     }
 
     public static boolean checkName(String str) {

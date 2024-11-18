@@ -312,7 +312,7 @@ class OpNewSimpleCri extends CriteriaOperator {
     }
     public String toString() {
         String quote = attrName == Criteria.AttrName.Name || attrName == Criteria.AttrName.Type ? "\"" : "";
-        return "newSimpleCri " + criName + " " + attrName + " " + criOp + quote + val + quote;
+        return "newSimpleCri " + criName + " " + attrName + " " + criOp + ' ' + quote + val + quote + '\n';
     }
 }
 
