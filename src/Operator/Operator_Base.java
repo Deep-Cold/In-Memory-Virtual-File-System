@@ -14,22 +14,42 @@ import Directory.FileSystemElement;
 import Disk.Disk;
 import Document.Document;
 
+/**
+ * The Base of Operator
+ */
 public abstract class Operator_Base {
     private final Operation op;
+
+    /**
+     * @param op The corresponding operation name
+     */
     Operator_Base(Operation op) {
         this.op = op;
     }
 
+    /**
+     * @throws IOException If reading or writing the file is failed
+     */
     public abstract void runCommand() throws IOException;
 
+    /**
+     * error input
+     */
     public static void errInput() {
         throw new IllegalArgumentException("The input format is incorrect.");
     }
 
+    /**
+     * memory exceed
+     */
     public static void memExceed() {
         throw new IllegalArgumentException("The memory is not enough.");
     }
 
+    /**
+     * @param str The STring to be converted
+     * @return The corresponding Operator
+     */
     public static Operator_Base getOperator(String str) {
         Operation op = Operation.fromString(str.split(" ")[0]);
         return switch (op) {
@@ -57,17 +77,30 @@ public abstract class Operator_Base {
     }
 }
 
+/**
+ * Operaion newDisk
+ */
 class OpNewDisk extends Operator_Base {
     private final int siz;
+
+    /**
+     * @param op The corresponding operation name
+     * @param siz The size of the disk
+     */
     OpNewDisk(Operation op, int siz) {
         super(op);
         this.siz = siz;
     }
 
+    @Override
     public void runCommand() {
         Disk.newDisk(siz);
     }
 
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewDisk fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
@@ -77,9 +110,19 @@ class OpNewDisk extends Operator_Base {
     }
 }
 
+/**
+ * Operaion newDoc
+ */
 class OpNewDoc extends RedoOperator {
     private final String fileName, fileContent;
     private final Document.docTypes docType;
+
+    /**
+     * @param op The corresponding operation name
+     * @param fileName The name of the document
+     * @param docType The type of the document
+     * @param fileContent The content of the document
+     */
     OpNewDoc(Operation op, String fileName, Document.docTypes docType, String fileContent) {
         super(op);
         this.fileName = fileName;
@@ -87,6 +130,7 @@ class OpNewDoc extends RedoOperator {
         this.fileContent = fileContent;
     }
 
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         Document nDoc = new Document(fileName, docType, fileContent, dir);
@@ -94,6 +138,10 @@ class OpNewDoc extends RedoOperator {
         dir.addFile(nDoc);
     }
 
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewDoc fromString(String str) {
         String[] elem = str.split(" ", 4);
         if (elem.length != 4) errInput();
@@ -106,6 +154,7 @@ class OpNewDoc extends RedoOperator {
         return new OpNewDoc(Operation.newDoc, elem[1], docType, docContent);
     }
 
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, fileName));
@@ -113,13 +162,22 @@ class OpNewDoc extends RedoOperator {
     }
 }
 
+/**
+ * Operaion newDir
+ */
 class OpNewDir extends RedoOperator {
     private final String dirName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param dirName The name of the directory
+     */
     OpNewDir(Operation op, String dirName) {
         super(op);
         this.dirName = dirName;
     }
 
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         Directory nDir = new Directory(dirName, dir);
@@ -127,12 +185,17 @@ class OpNewDir extends RedoOperator {
         dir.addFile(nDir);
     }
 
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewDir fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
         return new OpNewDir(Operation.newDir, elem[1]);
     }
 
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, dirName));
@@ -140,21 +203,36 @@ class OpNewDir extends RedoOperator {
     }
 }
 
+/**
+ * Operaion delete
+ */
 class OpDelete extends RedoOperator {
     private final String fileName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param fileName The name of the file to be deleted
+     */
     OpDelete(Operation op, String fileName) {
         super(op);
         this.fileName = fileName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.delFile(fileName);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpDelete fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
         return new OpDelete(Operation.delete, elem[1]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement cur = dir.getFileByName(fileName);
@@ -166,34 +244,50 @@ class OpDelete extends RedoOperator {
                 if(elem instanceof Directory) {
                     ret.add(new OpNewDir(Operation.newDir, elem.getName()));
                 }
-                else if(elem instanceof Document) {
+                else{
                     ret.add(new OpNewDoc(Operation.newDoc, elem.getName(), ((Document) elem).getDocType(), ((Document) elem).getContent()));
                 }
             }
         }
-        else if(cur instanceof Document) {
+        else {
             ret.add(new OpNewDoc(Operation.newDoc, cur.getName(), ((Document) cur).getDocType(), ((Document) cur).getContent()));
         }
         return ret;
     }
 }
 
+/**
+ * Operaion rename
+ */
 class OpRename extends RedoOperator {
     private final String oldName, newName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param oldName The original name of the file
+     * @param newName The new name of the file
+     */
     OpRename(Operation op, String oldName, String newName) {
         super(op);
         this.oldName = oldName;
         this.newName = newName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.renameFile(oldName, newName);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpRename fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 3) errInput();
         return new OpRename(Operation.rename, elem[1], elem[2]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         ArrayList<Operator_Base> cur = new ArrayList<>();
         cur.add(new OpRename(Operation.rename, newName, oldName));
@@ -201,12 +295,21 @@ class OpRename extends RedoOperator {
     }
 }
 
+/**
+ * Operaion changeDir
+ */
 class OpChangeDir extends RedoOperator {
     private final String dirName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param dirName The new working directory
+     */
     OpChangeDir(Operation op, String dirName) {
         super(op);
         this.dirName = dirName;
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement nDir;
@@ -215,11 +318,17 @@ class OpChangeDir extends RedoOperator {
         if(nDir == null || nDir instanceof Document) errInput();
         Disk.getDisk().setCurDir((Directory) nDir);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpChangeDir fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
         return new OpChangeDir(Operation.changeDir, elem[1]);
     }
+    @Override
     public ArrayList<Operator_Base> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         ArrayList<Operator_Base> cur = new ArrayList<>();
@@ -228,14 +337,26 @@ class OpChangeDir extends RedoOperator {
     }
 }
 
+/**
+ * Operaion list
+ */
 class OpList extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpList(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.listFiles();
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpList fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
@@ -243,14 +364,26 @@ class OpList extends Operator_Base {
     }
 }
 
+/**
+ * Operaion rList
+ */
 class OpRList extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpRList(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Directory dir = Disk.getDisk().getCurDir();
         dir.rListFiles();
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpRList fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
@@ -258,10 +391,21 @@ class OpRList extends Operator_Base {
     }
 }
 
+/**
+ * Operaion newSimpleCri
+ */
 class OpNewSimpleCri extends CriteriaOperator {
     private final String criName, val;
     private final Op criOp;
     private final Criteria.AttrName attrName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param criName The Critiria Name
+     * @param attr The Criteria Attribute Name
+     * @param criOp The Criteria Operator Name
+     * @param val The Criteria Value
+     */
     OpNewSimpleCri(Operation op, String criName, Criteria.AttrName attr, Op criOp, String val) {
         super(op);
         this.criName = criName;
@@ -269,15 +413,22 @@ class OpNewSimpleCri extends CriteriaOperator {
         this.attrName = attr;
         this.val = val;
     }
+    @Override
     public String getName() {
         return criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(attrName != Criteria.AttrName.Size)
             disk.addCriteria(new Criteria(criName, attrName, criOp, CriteriaStringValue.parse(val)));
         else disk.addCriteria(new Criteria(criName, attrName, criOp, CriteriaIntValue.parse(val)));
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewSimpleCri fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 5) errInput();
@@ -313,16 +464,27 @@ class OpNewSimpleCri extends CriteriaOperator {
     }
 }
 
+/**
+ * Operaion newNegation
+ */
 class OpNewNegation extends CriteriaOperator {
-    String criName1, criName2;
+    private final String criName1, criName2;
+
+    /**
+     * @param op The corresponding operation name
+     * @param criName1 The new Criteria Name
+     * @param criName2 The existing Criteria Name
+     */
     OpNewNegation(Operation op, String criName1, String criName2) {
         super(op);
         this.criName1 = criName1;
         this.criName2 = criName2;
     }
+    @Override
     public String getName() {
         return criName1;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(disk.searchCriteria(criName1) != null) errInput();
@@ -330,6 +492,10 @@ class OpNewNegation extends CriteriaOperator {
         if(ori == null) errInput();
         disk.addCriteria(new Criteria(criName1, LogicOp.NOT, ori));
     }
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewNegation fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 3) errInput();
@@ -341,9 +507,20 @@ class OpNewNegation extends CriteriaOperator {
     }
 }
 
+/**
+ * Operaion newBinaryCri
+ */
 class OpNewBinaryCri extends CriteriaOperator {
     private final String criName1, criName3, criName4;
     private final LogicOp logicOp;
+
+    /**
+     * @param op The corresponding operation name
+     * @param attr1 The new Criteria name
+     * @param attr3 The left Criteria name
+     * @param logicOp The logicOp applied to the Criteria
+     * @param attr4 The right Criteria name
+     */
     OpNewBinaryCri(Operation op, String attr1, String attr3, LogicOp logicOp, String attr4) {
         super(op);
         this.criName1 = attr1;
@@ -351,9 +528,11 @@ class OpNewBinaryCri extends CriteriaOperator {
         this.logicOp = logicOp;
         this.criName4 = attr4;
     }
+    @Override
     public String getName() {
         return criName1;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         if(disk.searchCriteria(criName1) != null) errInput();
@@ -361,6 +540,11 @@ class OpNewBinaryCri extends CriteriaOperator {
         if(ori1 == null || ori2 == null) errInput();
         disk.addCriteria(new Criteria(criName1, ori1, logicOp, ori2));
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpNewBinaryCri fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 5) errInput();
@@ -374,14 +558,26 @@ class OpNewBinaryCri extends CriteriaOperator {
     }
 }
 
+/**
+ * Operaion printAllCriteria
+ */
 class OpPrintAllCriteria extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpPrintAllCriteria(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         disk.printAllCriteria();
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpPrintAllCriteria fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
@@ -389,18 +585,32 @@ class OpPrintAllCriteria extends Operator_Base {
     }
 }
 
+/**
+ * Operaion search
+ */
 class OpSearch extends Operator_Base {
     private final String criName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param criName The Criteria to be applied
+     */
     OpSearch(Operation op, String criName) {
         super(op);
         this.criName = criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         Criteria cri = disk.searchCriteria(criName);
         if(cri == null) errInput();
         disk.getCurDir().searchFiles(cri);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpSearch fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
@@ -408,18 +618,32 @@ class OpSearch extends Operator_Base {
     }
 }
 
+/**
+ * Operaion rSearch
+ */
 class OpRSearch extends Operator_Base {
-    String criName;
+    private final String criName;
+
+    /**
+     * @param op The corresponding operation name
+     * @param criName The Criteria name to be applied
+     */
     OpRSearch(Operation op, String criName) {
         super(op);
         this.criName = criName;
     }
+    @Override
     public void runCommand() {
         Disk disk = Disk.getDisk();
         Criteria cri = disk.searchCriteria(criName);
         if(cri == null) errInput();
         disk.getCurDir().rSearchFiles(cri);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpRSearch fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
@@ -427,16 +651,30 @@ class OpRSearch extends Operator_Base {
     }
 }
 
+/**
+ * Operaion save
+ */
 class OpSave extends Operator_Base {
     private final String path;
+
+    /**
+     * @param op The corresponding operation name
+     * @param path The path of the file
+     */
     OpSave(Operation op, String path) {
         super(op);
         this.path = path;
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.save(path);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpSave fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
@@ -444,15 +682,29 @@ class OpSave extends Operator_Base {
     }
 }
 
+/**
+ * Operaion load
+ */
 class OpLoad extends Operator_Base {
     private final String path;
+
+    /**
+     * @param op The corresponding operation name
+     * @param path The path of the file
+     */
     OpLoad(Operation op, String path) {
         super(op);
         this.path = path;
     }
+    @Override
     public void runCommand() throws IOException {
         Disk.load(path);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpLoad fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
@@ -460,14 +712,26 @@ class OpLoad extends Operator_Base {
     }
 }
 
+/**
+ * Operaion undo
+ */
 class OpUndo extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpUndo(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.undo();
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpUndo fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
@@ -475,14 +739,26 @@ class OpUndo extends Operator_Base {
     }
 }
 
+/**
+ * Operaion redo
+ */
 class OpRedo extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpRedo(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() throws IOException {
         Disk disk = Disk.getDisk();
         disk.redo();
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpRedo fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();
@@ -490,13 +766,25 @@ class OpRedo extends Operator_Base {
     }
 }
 
+/**
+ * Operaion quit
+ */
 class OpQuit extends Operator_Base {
+    /**
+     * @param op The corresponding operation name
+     */
     OpQuit(Operation op) {
         super(op);
     }
+    @Override
     public void runCommand() {
         System.exit(0);
     }
+
+    /**
+     * @param str The String to be converted
+     * @return The corresponding operation
+     */
     public static OpQuit fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 1) errInput();

@@ -8,7 +8,10 @@ import Criteria.*;
 import Document.Document;
 import Operator.*;
 
-public class Disk {
+/**
+ * Disk
+ */
+public final class Disk {
 
     private final int diskSize;
     private final Directory rootDir;
@@ -30,15 +33,26 @@ public class Disk {
         this.addCriteria(cri);
     }
 
+    /**
+     * @param criteria The criteria to be added
+     */
     public void addCriteria(Criteria criteria){
         if(this.searchCriteria(criteria.getName()) != null) throw new IllegalArgumentException("Criteria exists.");
         criteriaList.add(criteria);
     }
+
+    /**
+     * @param s The name of the Criteria
+     * @return The Criteria with name s
+     */
     public Criteria searchCriteria(String s){
         Criteria ret = criteriaList.ceiling(new Criteria(s));
         return ret != null && ret.getName().equals(s) ? ret : null;
     }
 
+    /**
+     * @param s The name of the Criteria
+     */
     public void deleteCriteria(String s){
         Criteria cur = searchCriteria(s);
         if(cur != null){
@@ -46,6 +60,9 @@ public class Disk {
         }
     }
 
+    /**
+     * Print all the criteria
+     */
     public void printAllCriteria() {
         for(Criteria criteria : criteriaList) {
             if(Objects.equals(criteria.getName(), "IsDocument")) System.out.println("IsDocument");
@@ -53,40 +70,62 @@ public class Disk {
         }
     }
 
+    /**
+     * @param siz The size of the disk
+     */
     public static void newDisk(int siz) {
         if(siz <= 0) throw new IllegalArgumentException("Size must be greater than zero.");
         root = new Disk(siz);
     }
 
+    /**
+     * @return The current disk
+     */
     public static Disk getDisk() {
         if(root == null) throw new IllegalArgumentException("No current disk.");
         return root;
     }
 
+    /**
+     * @return The current working directory
+     */
     public Directory getCurDir() {
         if(curDir == null)
             throw new IllegalArgumentException("No working directory found.");
         return curDir;
     }
 
+    /**
+     * @param curDir The new working directory
+     */
     public void setCurDir(Directory curDir) {
         this.curDir = curDir;
     }
 
+    /**
+     * @param operator The sequence of operator to be pushed
+     * @param needClear Do we need to clear the redoStack
+     */
     public void pushUndoStack(ArrayList<Operator_Base> operator, boolean needClear) {
         undoStack.push(operator);
         if(needClear) {
             if(operator.getFirst() instanceof CriteriaOperator) {
-                criList.add(((CriteriaOperator) operator.getFirst()));
+                getCriList().add(((CriteriaOperator) operator.getFirst()));
             }
             redoStack.clear();
         }
     }
 
+    /**
+     * @param operator The sequence of operator to be pushed
+     */
     public void pushRedoStack(ArrayList<Operator_Base> operator) {
         undoStack.push(operator);
     }
 
+    /**
+     * @throws IOException If opening the file cause error.
+     */
     public void undo() throws IOException {
         if(undoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed");
         ArrayList<Operator_Base> operator = undoStack.pop();
@@ -104,6 +143,9 @@ public class Disk {
         pushRedoStack(RedoOperator);
     }
 
+    /**
+     * @throws IOException If opening the file cause error.
+     */
     public void redo() throws IOException {
         if(redoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed.");
         ArrayList<Operator_Base> operator = redoStack.pop();
@@ -121,6 +163,10 @@ public class Disk {
         pushUndoStack(UndoOperator, false);
     }
 
+    /**
+     * @param path The path of the file to be saved
+     * @throws IOException If opening the file cause error.
+     */
     public void save(String path) throws IOException {
         File file = new File(path);
         // if(file.exists()) throw new IllegalArgumentException("File exists.");
@@ -129,7 +175,7 @@ public class Disk {
         OutputStreamWriter output = new OutputStreamWriter(fileStream);
         output.write("newDisk" + " " + diskSize + "\n");
         saveFile(rootDir, output);
-        for(CriteriaOperator op : criList) {
+        for(CriteriaOperator op : getCriList()) {
             if(op.isDelete()) continue;
             output.write(op.toString());
         }
@@ -137,6 +183,11 @@ public class Disk {
         fileStream.close();
     }
 
+    /**
+     * @param cur The current Directory
+     * @param out The output Stream
+     * @throws IOException If opening the file cause error.
+     */
     public void saveFile(Directory cur, OutputStreamWriter out) throws IOException {
         for(FileSystemElement element : cur.getFiles()) {
             if(element instanceof Directory) {
@@ -144,13 +195,17 @@ public class Disk {
                 out.write("changeDir" + " " + element.getName() + "\n");
                 saveFile((Directory) element, out);
             }
-            else if (element instanceof Document) {
+            else {
                 out.write("newDoc" + " " + element.getName() + " " + element.getType() + " " + ((Document) element).getContent() + "\n");
             }
             if(cur != rootDir) out.write("changeDir ..\n");
         }
     }
 
+    /**
+     * @param path The path of the file to be loaded
+     * @throws IOException If opening the file cause error.
+     */
     public static void load(String path) throws IOException {
         File file = new File(path);
         if(!file.exists()) throw new IllegalArgumentException("File does not exists.");
@@ -162,14 +217,24 @@ public class Disk {
             Operator_Base curOp = Operator_Base.getOperator(command);
             curOp.runCommand();
             if(curOp instanceof CriteriaOperator) {
-                getDisk().criList.add(((CriteriaOperator) curOp));
+                getDisk().getCriList().add(((CriteriaOperator) curOp));
             }
         }
         reader.close();
         fileStream.close();
     }
 
+    /**
+     * @return The remaining size of the disk
+     */
     public int getRemSiz() {
         return diskSize - rootDir.getSize();
+    }
+
+    /**
+     * @return The criteria list of the disk
+     */
+    public ArrayList<CriteriaOperator> getCriList() {
+        return criList;
     }
 }
