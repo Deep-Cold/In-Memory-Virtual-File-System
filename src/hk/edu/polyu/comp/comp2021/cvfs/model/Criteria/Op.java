@@ -67,12 +67,14 @@ public enum Op {
      * @return The corresponding Operator
      */
     public static Op fromString(String str) {
+        Op ret = null;
         for(Op op : Op.values()){
             if(op.toString().equals(str)){
-                return op;
+                ret = op;
+                break;
             }
         }
-        return null;
+        return ret;
     }
 
     /**

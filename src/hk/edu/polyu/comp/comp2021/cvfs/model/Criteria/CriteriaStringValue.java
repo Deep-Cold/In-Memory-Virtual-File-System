@@ -30,7 +30,7 @@ public class CriteriaStringValue implements CriteriaValue {
      * @return If the CriteriaValue equals value
      */
     public boolean equals(CriteriaValue value){
-            return this.value.equals(((CriteriaStringValue)value).getStringValue());
+            return this.value.equals(value.toString());
     }
 
     /**
@@ -41,10 +41,4 @@ public class CriteriaStringValue implements CriteriaValue {
         return new CriteriaStringValue(value);
     }
 
-    /**
-     * @return The boxing value
-     */
-    public String getStringValue() {
-        return value;
-    }
 }
