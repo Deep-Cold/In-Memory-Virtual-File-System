@@ -7,13 +7,13 @@ import java.util.Objects;
 /**
  * The Base of Operator
  */
-public abstract class Operator_Base {
+public abstract class OperatorBase {
     private final Operation op;
 
     /**
      * @param op The corresponding operation name
      */
-    Operator_Base(Operation op) {
+    OperatorBase(Operation op) {
         this.op = op;
     }
 
@@ -40,7 +40,7 @@ public abstract class Operator_Base {
      * @param str The STring to be converted
      * @return The corresponding Operator
      */
-    public static Operator_Base getOperator(String str) {
+    public static OperatorBase getOperator(String str) {
         Operation op = Operation.fromString(str.split(" ")[0]);
         return switch (op) {
             case newDisk -> OpNewDisk.fromString(str);
@@ -70,7 +70,7 @@ public abstract class Operator_Base {
 /**
  * Operaion newDisk
  */
-class OpNewDisk extends Operator_Base {
+class OpNewDisk extends OperatorBase {
     private final int siz;
 
     /**
@@ -150,8 +150,8 @@ class OpNewDoc extends RedoOperator {
     }
 
     @Override
-    public ArrayList<Operator_Base> getReverse() {
-        ArrayList<Operator_Base> cur = new ArrayList<>();
+    public ArrayList<OperatorBase> getReverse() {
+        ArrayList<OperatorBase> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, fileName));
         return cur;
     }
@@ -191,8 +191,8 @@ class OpNewDir extends RedoOperator {
     }
 
     @Override
-    public ArrayList<Operator_Base> getReverse() {
-        ArrayList<Operator_Base> cur = new ArrayList<>();
+    public ArrayList<OperatorBase> getReverse() {
+        ArrayList<OperatorBase> cur = new ArrayList<>();
         cur.add(new OpDelete(Operation.delete, dirName));
         return cur;
     }
@@ -228,10 +228,10 @@ class OpDelete extends RedoOperator {
         return new OpDelete(Operation.delete, elem[1]);
     }
     @Override
-    public ArrayList<Operator_Base> getReverse() {
+    public ArrayList<OperatorBase> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
         FileSystemElement cur = dir.getFileByName(fileName);
-        ArrayList<Operator_Base> ret = new ArrayList<>();
+        ArrayList<OperatorBase> ret = new ArrayList<>();
         if(cur == null) errInput();
         if(cur instanceof Directory) {
             List<FileSystemElement> elems = ((Directory) cur).getAllFiles();
@@ -283,8 +283,8 @@ class OpRename extends RedoOperator {
         return new OpRename(Operation.rename, elem[1], elem[2]);
     }
     @Override
-    public ArrayList<Operator_Base> getReverse() {
-        ArrayList<Operator_Base> cur = new ArrayList<>();
+    public ArrayList<OperatorBase> getReverse() {
+        ArrayList<OperatorBase> cur = new ArrayList<>();
         cur.add(new OpRename(Operation.rename, newName, oldName));
         return cur;
     }
@@ -324,9 +324,9 @@ class OpChangeDir extends RedoOperator {
         return new OpChangeDir(Operation.changeDir, elem[1]);
     }
     @Override
-    public ArrayList<Operator_Base> getReverse() {
+    public ArrayList<OperatorBase> getReverse() {
         Directory dir = Disk.getDisk().getCurDir();
-        ArrayList<Operator_Base> cur = new ArrayList<>();
+        ArrayList<OperatorBase> cur = new ArrayList<>();
         cur.add(new OpChangeDir(Operation.changeDir, Objects.equals(dirName, "..") ? dir.getName() : ".."));
         return cur;
     }
@@ -335,7 +335,7 @@ class OpChangeDir extends RedoOperator {
 /**
  * Operaion list
  */
-class OpList extends Operator_Base {
+class OpList extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -362,7 +362,7 @@ class OpList extends Operator_Base {
 /**
  * Operaion rList
  */
-class OpRList extends Operator_Base {
+class OpRList extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -556,7 +556,7 @@ class OpNewBinaryCri extends CriteriaOperator {
 /**
  * Operaion printAllCriteria
  */
-class OpPrintAllCriteria extends Operator_Base {
+class OpPrintAllCriteria extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -583,7 +583,7 @@ class OpPrintAllCriteria extends Operator_Base {
 /**
  * Operaion search
  */
-class OpSearch extends Operator_Base {
+class OpSearch extends OperatorBase {
     private final String criName;
 
     /**
@@ -616,7 +616,7 @@ class OpSearch extends Operator_Base {
 /**
  * Operaion rSearch
  */
-class OpRSearch extends Operator_Base {
+class OpRSearch extends OperatorBase {
     private final String criName;
 
     /**
@@ -649,7 +649,7 @@ class OpRSearch extends Operator_Base {
 /**
  * Operaion save
  */
-class OpSave extends Operator_Base {
+class OpSave extends OperatorBase {
     private final String path;
 
     /**
@@ -680,7 +680,7 @@ class OpSave extends Operator_Base {
 /**
  * Operaion load
  */
-class OpLoad extends Operator_Base {
+class OpLoad extends OperatorBase {
     private final String path;
 
     /**
@@ -710,7 +710,7 @@ class OpLoad extends Operator_Base {
 /**
  * Operaion undo
  */
-class OpUndo extends Operator_Base {
+class OpUndo extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -737,7 +737,7 @@ class OpUndo extends Operator_Base {
 /**
  * Operaion redo
  */
-class OpRedo extends Operator_Base {
+class OpRedo extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -764,7 +764,7 @@ class OpRedo extends Operator_Base {
 /**
  * Operaion quit
  */
-class OpQuit extends Operator_Base {
+class OpQuit extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */

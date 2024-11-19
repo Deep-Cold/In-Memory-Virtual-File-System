@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * The operator support undo
  */
-public abstract class RedoOperator extends Operator_Base{
+public abstract class RedoOperator extends OperatorBase {
     /**
      * @param op The corresponding operation name
      */
@@ -15,5 +15,5 @@ public abstract class RedoOperator extends Operator_Base{
     /**
      * @return The list of the reverse operation
      */
-    public abstract ArrayList<Operator_Base> getReverse();
+    public abstract ArrayList<OperatorBase> getReverse();
 }

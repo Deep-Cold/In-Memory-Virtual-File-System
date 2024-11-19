@@ -3,7 +3,7 @@ package hk.edu.polyu.comp.comp2021.cvfs.model;
 /**
  * CriteriaOperator
  */
-public abstract class CriteriaOperator extends Operator_Base {
+public abstract class CriteriaOperator extends OperatorBase {
     private boolean isDelete;
 
     /**

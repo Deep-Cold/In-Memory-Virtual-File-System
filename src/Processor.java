@@ -15,11 +15,11 @@ public class Processor {
      */
     public static void runNextStep() throws IOException {
         String command = input.nextLine();
-        Operator_Base curOp = Operator_Base.getOperator(command);
+        OperatorBase curOp = OperatorBase.getOperator(command);
         if (!(curOp instanceof RedoOperator)) {
             if(curOp instanceof CriteriaOperator) {
                 curOp.runCommand();
-                ArrayList<Operator_Base> Op = new ArrayList<>();
+                ArrayList<OperatorBase> Op = new ArrayList<>();
                 Op.add(curOp);
                 Disk.getDisk().pushUndoStack(Op, true);
             }
@@ -27,7 +27,7 @@ public class Processor {
                 curOp.runCommand();
             }
         } else {
-            ArrayList<Operator_Base> revOp = ((RedoOperator) curOp).getReverse();
+            ArrayList<OperatorBase> revOp = ((RedoOperator) curOp).getReverse();
             curOp.runCommand();
             Disk.getDisk().pushUndoStack(revOp, true);
         }

@@ -13,7 +13,7 @@ public final class Disk {
     private Directory curDir;
     private final TreeSet<Criteria> criteriaList;
     private static Disk root;
-    private final Stack<ArrayList<Operator_Base>> redoStack, undoStack;
+    private final Stack<ArrayList<OperatorBase>> redoStack, undoStack;
     private final ArrayList<CriteriaOperator> criList;
 
     private Disk(int siz) {
@@ -101,7 +101,7 @@ public final class Disk {
      * @param operator The sequence of operator to be pushed
      * @param needClear Do we need to clear the redoStack
      */
-    public void pushUndoStack(ArrayList<Operator_Base> operator, boolean needClear) {
+    public void pushUndoStack(ArrayList<OperatorBase> operator, boolean needClear) {
         undoStack.push(operator);
         if(needClear) {
             if(operator.getFirst() instanceof CriteriaOperator) {
@@ -114,7 +114,7 @@ public final class Disk {
     /**
      * @param operator The sequence of operator to be pushed
      */
-    public void pushRedoStack(ArrayList<Operator_Base> operator) {
+    public void pushRedoStack(ArrayList<OperatorBase> operator) {
         undoStack.push(operator);
     }
 
@@ -123,9 +123,9 @@ public final class Disk {
      */
     public void undo() throws IOException {
         if(undoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed");
-        ArrayList<Operator_Base> operator = undoStack.pop();
-        ArrayList<Operator_Base> RedoOperator = new ArrayList<>();
-        for(Operator_Base op : operator) {
+        ArrayList<OperatorBase> operator = undoStack.pop();
+        ArrayList<OperatorBase> RedoOperator = new ArrayList<>();
+        for(OperatorBase op : operator) {
             if(op instanceof CriteriaOperator) {
                 deleteCriteria(((CriteriaOperator) op).getName());
                 ((CriteriaOperator) op).setDelete(true);
@@ -143,9 +143,9 @@ public final class Disk {
      */
     public void redo() throws IOException {
         if(redoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed.");
-        ArrayList<Operator_Base> operator = redoStack.pop();
-        ArrayList<Operator_Base> UndoOperator = new ArrayList<>();
-        for(Operator_Base op : operator) {
+        ArrayList<OperatorBase> operator = redoStack.pop();
+        ArrayList<OperatorBase> UndoOperator = new ArrayList<>();
+        for(OperatorBase op : operator) {
             if(op instanceof CriteriaOperator) {
                 op.runCommand();
                 ((CriteriaOperator) op).setDelete(false);
@@ -209,7 +209,7 @@ public final class Disk {
         BufferedReader reader = new BufferedReader(input);
         String command;
         while((command = reader.readLine()) != null) {
-            Operator_Base curOp = Operator_Base.getOperator(command);
+            OperatorBase curOp = OperatorBase.getOperator(command);
             curOp.runCommand();
             if(curOp instanceof CriteriaOperator) {
                 getDisk().getCriList().add(((CriteriaOperator) curOp));

@@ -1,9 +1,7 @@
 package hk.edu.polyu.comp.comp2021.cvfs.model;
 import org.junit.*;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class OperatorBaseTest {
@@ -12,9 +10,9 @@ public class OperatorBaseTest {
     @Before
     public void init() throws Exception {
         sc = new Scanner(new FileReader("init.in"));
-        Operator_Base initOp;
+        OperatorBase initOp;
         while(sc.hasNextLine()) {
-            initOp = Operator_Base.getOperator(sc.nextLine());
+            initOp = OperatorBase.getOperator(sc.nextLine());
             initOp.runCommand();
         }
     }
@@ -22,9 +20,9 @@ public class OperatorBaseTest {
     @Test
     public void testCriteria() throws Exception {
         sc = new Scanner(new FileReader("testCriteria.in"));
-        Operator_Base testOp;
+        OperatorBase testOp;
         while(sc.hasNextLine()) {
-            testOp = Operator_Base.getOperator(sc.nextLine());
+            testOp = OperatorBase.getOperator(sc.nextLine());
             testOp.runCommand();
         }
     }
@@ -32,9 +30,9 @@ public class OperatorBaseTest {
     @Test
     public void testErrors() throws Exception {
         sc = new Scanner(new FileReader("testErrors.in"));
-        Operator_Base testOp;
+        OperatorBase testOp;
         while(sc.hasNextLine()) {
-            testOp = Operator_Base.getOperator(sc.nextLine());
+            testOp = OperatorBase.getOperator(sc.nextLine());
             testOp.runCommand();
         }
     }
