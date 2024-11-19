@@ -7,3 +7,11 @@ newDoc nmsl java fku
 newSimpleCri ab size >= 2
 newSimpleCri ac type equals "txt"
 newBinaryCri ba ab && ac
+rList
+rename 1919810 name
+list
+delete name
+undo
+save ./test/test.out
+newDisk 1010
+load ./test/test.out

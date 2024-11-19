@@ -7,3 +7,4 @@ newDoc htmlfile html "html content"
 changeDir ..
 changeDir dir2
 newDoc javafile java "java content"
+changeDir ..

@@ -1,14 +1,20 @@
 newDisk fk
 newDisk //'
 newDisk \
+undo
+redo
+save .///\/
+load dsc
 newDoc doc1 r 123\
 newDoc doc2 txt 123\
 newDoc doc3 java \/:"\
 newNegation EA EZ
 newBinaryCri EB EZ EX
 newNegation
-newDisk
 
+newDisk
+newDoc longlonglonglonglongname txt 123 content
 newDoc
 newDoc doc4 txt 123 abc
 newSimpleCri TA type "not equals" txt
+newSimpleCri TAA type "not equals" txt

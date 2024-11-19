@@ -155,9 +155,9 @@ public class Criteria {
                     return sKey.equals(value);
                 case Size:
                     switch(op){
-                        case Equal:
+                        case sizeEqual:
                             return iKey.getValue() == value.getValue();
-                        case NotEqual:
+                        case sizeNotEqual:
                             return iKey.getValue() != value.getValue();
                         case Greater:
                             return iKey.getValue() > value.getValue();
@@ -183,13 +183,5 @@ public class Criteria {
      */
     public static boolean checkName(String str) {
         return str.length() != 2 || !Character.isAlphabetic(str.charAt(0)) || !Character.isAlphabetic(str.charAt(1));
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if(o instanceof Criteria){
-            return getName().equals(((Criteria) o).getName());
-        }
-        return false;
     }
 }

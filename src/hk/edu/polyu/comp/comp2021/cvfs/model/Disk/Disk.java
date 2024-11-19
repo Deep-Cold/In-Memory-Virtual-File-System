@@ -125,7 +125,7 @@ public final class Disk {
      * @param operator The sequence of operator to be pushed
      */
     public void pushRedoStack(ArrayList<OperatorBase> operator) {
-        undoStack.push(operator);
+        redoStack.push(operator);
     }
 
     /**
@@ -134,18 +134,19 @@ public final class Disk {
     public void undo() throws IOException {
         if(undoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed");
         ArrayList<OperatorBase> operator = undoStack.pop();
-        ArrayList<OperatorBase> RedoOperator = new ArrayList<>();
+        ArrayList<OperatorBase> redoOperator = new ArrayList<>();
         for(OperatorBase op : operator) {
             if(op instanceof CriteriaOperator) {
                 deleteCriteria(((CriteriaOperator) op).getName());
                 ((CriteriaOperator) op).setDelete(true);
+                redoOperator.add(op);
             }
             else {
-                RedoOperator.addAll(((hk.edu.polyu.comp.comp2021.cvfs.model.Operator.RedoOperator) op).getReverse());
+                redoOperator.addAll(((hk.edu.polyu.comp.comp2021.cvfs.model.Operator.RedoOperator) op).getReverse());
                 op.runCommand();
             }
         }
-        pushRedoStack(RedoOperator);
+        pushRedoStack(redoOperator);
     }
 
     /**
@@ -154,18 +155,19 @@ public final class Disk {
     public void redo() throws IOException {
         if(redoStack.isEmpty()) throw new IllegalArgumentException("No operation can be performed.");
         ArrayList<OperatorBase> operator = redoStack.pop();
-        ArrayList<OperatorBase> UndoOperator = new ArrayList<>();
+        ArrayList<OperatorBase> undoOperator = new ArrayList<>();
         for(OperatorBase op : operator) {
             if(op instanceof CriteriaOperator) {
                 op.runCommand();
                 ((CriteriaOperator) op).setDelete(false);
+                undoOperator.add(op);
             }
             else {
-                UndoOperator.addAll(((RedoOperator) op).getReverse());
+                undoOperator.addAll(((RedoOperator) op).getReverse());
                 op.runCommand();
             }
         }
-        pushUndoStack(UndoOperator, false);
+        pushUndoStack(undoOperator, false);
     }
 
     /**
