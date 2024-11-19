@@ -1,4 +1,10 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Operator;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Criteria.*;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Disk.Disk;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Document;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +43,7 @@ public abstract class OperatorBase {
     }
 
     /**
-     * @param str The STring to be converted
+     * @param str The String to be converted
      * @return The corresponding Operator
      */
     public static OperatorBase getOperator(String str) {
@@ -68,7 +74,7 @@ public abstract class OperatorBase {
 }
 
 /**
- * Operaion newDisk
+ * Operation newDisk
  */
 class OpNewDisk extends OperatorBase {
     private final int siz;
@@ -106,7 +112,7 @@ class OpNewDisk extends OperatorBase {
 }
 
 /**
- * Operaion newDoc
+ * Operation newDoc
  */
 class OpNewDoc extends RedoOperator {
     private final String fileName, fileContent;
@@ -158,7 +164,7 @@ class OpNewDoc extends RedoOperator {
 }
 
 /**
- * Operaion newDir
+ * Operation newDir
  */
 class OpNewDir extends RedoOperator {
     private final String dirName;
@@ -199,7 +205,7 @@ class OpNewDir extends RedoOperator {
 }
 
 /**
- * Operaion delete
+ * Operation delete
  */
 class OpDelete extends RedoOperator {
     private final String fileName;
@@ -252,7 +258,7 @@ class OpDelete extends RedoOperator {
 }
 
 /**
- * Operaion rename
+ * Operation rename
  */
 class OpRename extends RedoOperator {
     private final String oldName, newName;
@@ -291,7 +297,7 @@ class OpRename extends RedoOperator {
 }
 
 /**
- * Operaion changeDir
+ * Operation changeDir
  */
 class OpChangeDir extends RedoOperator {
     private final String dirName;
@@ -333,7 +339,7 @@ class OpChangeDir extends RedoOperator {
 }
 
 /**
- * Operaion list
+ * Operation list
  */
 class OpList extends OperatorBase {
     /**
@@ -360,7 +366,7 @@ class OpList extends OperatorBase {
 }
 
 /**
- * Operaion rList
+ * Operation rList
  */
 class OpRList extends OperatorBase {
     /**
@@ -387,7 +393,7 @@ class OpRList extends OperatorBase {
 }
 
 /**
- * Operaion newSimpleCri
+ * Operation newSimpleCri
  */
 class OpNewSimpleCri extends CriteriaOperator {
     private final String criName, val;
@@ -396,7 +402,7 @@ class OpNewSimpleCri extends CriteriaOperator {
 
     /**
      * @param op The corresponding operation name
-     * @param criName The Critiria Name
+     * @param criName The Criteria Name
      * @param attr The Criteria Attribute Name
      * @param criOp The Criteria Operator Name
      * @param val The Criteria Value
@@ -460,7 +466,7 @@ class OpNewSimpleCri extends CriteriaOperator {
 }
 
 /**
- * Operaion newNegation
+ * Operation newNegation
  */
 class OpNewNegation extends CriteriaOperator {
     private final String criName1, criName2;
@@ -503,7 +509,7 @@ class OpNewNegation extends CriteriaOperator {
 }
 
 /**
- * Operaion newBinaryCri
+ * Operation newBinaryCri
  */
 class OpNewBinaryCri extends CriteriaOperator {
     private final String criName1, criName3, criName4;
@@ -554,7 +560,7 @@ class OpNewBinaryCri extends CriteriaOperator {
 }
 
 /**
- * Operaion printAllCriteria
+ * Operation printAllCriteria
  */
 class OpPrintAllCriteria extends OperatorBase {
     /**
@@ -581,7 +587,7 @@ class OpPrintAllCriteria extends OperatorBase {
 }
 
 /**
- * Operaion search
+ * Operation search
  */
 class OpSearch extends OperatorBase {
     private final String criName;
@@ -614,7 +620,7 @@ class OpSearch extends OperatorBase {
 }
 
 /**
- * Operaion rSearch
+ * Operation rSearch
  */
 class OpRSearch extends OperatorBase {
     private final String criName;
@@ -647,7 +653,7 @@ class OpRSearch extends OperatorBase {
 }
 
 /**
- * Operaion save
+ * Operation save
  */
 class OpSave extends OperatorBase {
     private final String path;
@@ -678,7 +684,7 @@ class OpSave extends OperatorBase {
 }
 
 /**
- * Operaion load
+ * Operation load
  */
 class OpLoad extends OperatorBase {
     private final String path;
@@ -708,7 +714,7 @@ class OpLoad extends OperatorBase {
 }
 
 /**
- * Operaion undo
+ * Operation undo
  */
 class OpUndo extends OperatorBase {
     /**
@@ -735,7 +741,7 @@ class OpUndo extends OperatorBase {
 }
 
 /**
- * Operaion redo
+ * Operation redo
  */
 class OpRedo extends OperatorBase {
     /**
@@ -762,7 +768,7 @@ class OpRedo extends OperatorBase {
 }
 
 /**
- * Operaion quit
+ * Operation quit
  */
 class OpQuit extends OperatorBase {
     /**

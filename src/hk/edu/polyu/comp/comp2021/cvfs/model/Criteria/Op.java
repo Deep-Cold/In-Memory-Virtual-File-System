@@ -1,4 +1,4 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Criteria;
 import java.util.HashSet;
 
 /**
@@ -46,7 +46,7 @@ public enum Op {
      */
     sizeNotEqual("!=");
     private final String value;
-    private final static HashSet<Op> ariOps = new HashSet<Op>();
+    private final static HashSet<Op> ariOps = new HashSet<>();
     static {
         ariOps.add(Greater);
         ariOps.add(LessEqual);

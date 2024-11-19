@@ -1,4 +1,4 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Operator;
 import java.util.ArrayList;
 
 /**

@@ -1,4 +1,4 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent;
 
 /**
  * Document
@@ -67,7 +67,7 @@ public class Document implements FileSystemElement {
      * @param name Document Name
      * @param docType Document Type
      * @param docContent Document Content
-     * @param parent The Parrent Dirctory
+     * @param parent The Parent Directory
      */
     public Document(String name, docTypes docType, String docContent, Directory parent) {
         this.docType = docType;

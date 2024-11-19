@@ -1,4 +1,7 @@
-import hk.edu.polyu.comp.comp2021.cvfs.model.*;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.CriteriaOperator;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Disk.Disk;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.OperatorBase;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.RedoOperator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class Processor {
     }
 
     /**
-     * The mainloop the program
+     * The mainLoop the program
      */
     public static void mainLoop() {
         while(true)

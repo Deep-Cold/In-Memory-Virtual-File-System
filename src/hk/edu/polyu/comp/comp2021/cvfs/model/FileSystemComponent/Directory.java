@@ -1,4 +1,6 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent;
+
+import hk.edu.polyu.comp.comp2021.cvfs.model.Criteria.Criteria;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,21 +14,21 @@ public class Directory implements FileSystemElement {
      */
     public static final int TOTAL_SIZE = 40;
     /*
-     * hk.edu.polyu.comp.comp2021.cvfs.model.Directory(String name, hk.edu.polyu.comp.comp2021.cvfs.model.Directory parent): void
-     * addFile(hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement file): void
+     * hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory(String name, hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory parent): void
+     * addFile(hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement file): void
      * delFile(String name): void
-     * getFileByName(String name): hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement
+     * getFileByName(String name): hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement
      * renameFile(String oldName, String newName): void
      * listFiles(): void
      * rListFiles(): void
-     * getFiles(): List<hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemElement>
+     * getFiles(): List<hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement>
      * getName(): String
      * getSize(): int
      * setName(String name): void
      * validateName(String name): boolean
      * printInfo(): void
-     * getParent(): hk.edu.polyu.comp.comp2021.cvfs.model.Directory
-     * setParent(hk.edu.polyu.comp.comp2021.cvfs.model.Directory parent): void
+     * getParent(): hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory
+     * setParent(hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory parent): void
      */
     private String name;
     private final List<FileSystemElement> files;
@@ -49,7 +51,7 @@ public class Directory implements FileSystemElement {
     /**
      * @param file The file to be added in the Directory
      */
-    // Add a file(Directory.Document or hk.edu.polyu.comp.comp2021.cvfs.model.Directory) to the directory.
+    // Add a file(Directory.Document or hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory) to the directory.
     public void addFile(FileSystemElement file) {
         if (files.contains(file)) {
             throw new IllegalArgumentException("File already exists."); // Please catch exception in the caller. So does the following.

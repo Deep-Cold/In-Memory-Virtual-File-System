@@ -1,5 +1,7 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Criteria;
 
+
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement;
 
 /**
  *  Define the three types of Criteria
@@ -7,7 +9,7 @@ package hk.edu.polyu.comp.comp2021.cvfs.model;
 public class Criteria {
 
     /**
-     * @param s CriteraName
+     * @param s Criteria Name
      */
     public Criteria(String s){
         this.name = s;
@@ -25,7 +27,7 @@ public class Criteria {
          */
         Name("name"),
         /**
-         * Check if type euquals certain String
+         * Check if type equals certain String
          */
         Type("type"),
         /**

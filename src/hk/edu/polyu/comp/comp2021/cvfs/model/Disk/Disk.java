@@ -1,4 +1,14 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Disk;
+
+import hk.edu.polyu.comp.comp2021.cvfs.model.Criteria.Criteria;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.CriteriaOperator;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Criteria.CriteriaStringValue;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Directory;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.Document;
+import hk.edu.polyu.comp.comp2021.cvfs.model.FileSystemComponent.FileSystemElement;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Criteria.Op;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.OperatorBase;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.RedoOperator;
 
 import java.io.*;
 import java.util.*;
@@ -131,7 +141,7 @@ public final class Disk {
                 ((CriteriaOperator) op).setDelete(true);
             }
             else {
-                RedoOperator.addAll(((RedoOperator) op).getReverse());
+                RedoOperator.addAll(((hk.edu.polyu.comp.comp2021.cvfs.model.Operator.RedoOperator) op).getReverse());
                 op.runCommand();
             }
         }
@@ -166,6 +176,7 @@ public final class Disk {
         File file = new File(path);
         // if(file.exists()) throw new IllegalArgumentException("File exists.");
         if(!file.exists()) file.createNewFile();
+        if(!file.canWrite()) throw new IOException("Can't write to file.");
         FileOutputStream fileStream = new FileOutputStream(file);
         OutputStreamWriter output = new OutputStreamWriter(fileStream);
         output.write("newDisk" + " " + diskSize + "\n");
@@ -204,6 +215,7 @@ public final class Disk {
     public static void load(String path) throws IOException {
         File file = new File(path);
         if(!file.exists()) throw new IllegalArgumentException("File does not exists.");
+        if(!file.canRead()) throw new IOException("Can't read file.");
         FileInputStream fileStream = new FileInputStream(file);
         InputStreamReader input = new InputStreamReader(fileStream);
         BufferedReader reader = new BufferedReader(input);

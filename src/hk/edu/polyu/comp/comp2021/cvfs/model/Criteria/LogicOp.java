@@ -1,7 +1,7 @@
-package hk.edu.polyu.comp.comp2021.cvfs.model;
+package hk.edu.polyu.comp.comp2021.cvfs.model.Criteria;
 
 /**
- * The LogicOp of the composit Criteria
+ * The LogicOp of the composite Criteria
  */
 public enum LogicOp {
     /**

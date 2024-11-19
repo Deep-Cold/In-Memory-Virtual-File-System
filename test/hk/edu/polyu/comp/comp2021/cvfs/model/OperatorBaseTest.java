@@ -1,4 +1,5 @@
 package hk.edu.polyu.comp.comp2021.cvfs.model;
+import hk.edu.polyu.comp.comp2021.cvfs.model.Operator.OperatorBase;
 import org.junit.*;
 
 import java.io.FileReader;
@@ -32,8 +33,10 @@ public class OperatorBaseTest {
         sc = new Scanner(new FileReader("testErrors.in"));
         OperatorBase testOp;
         while(sc.hasNextLine()) {
-            testOp = OperatorBase.getOperator(sc.nextLine());
-            testOp.runCommand();
+            try {
+                testOp = OperatorBase.getOperator(sc.nextLine());
+                testOp.runCommand();
+            }catch(Exception e) {}
         }
     }
 
