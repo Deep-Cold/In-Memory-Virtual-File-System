@@ -40,7 +40,7 @@ The CVFS is a virtual disk management system that allows users to simulate a fil
 ### Features
 
 - Create and manage virtual disks with specified maximum sizes.
-- Support for documents of types: `txt`, `java`, and `html`.
+- Support for documents of types: `txt`, `java`, `html` and `css`.
 - Hierarchical organization with directories and subdirectories.
 - Define and use criteria to **search** for files.
 - **Save and load** virtual disks from the local file system.
@@ -140,7 +140,7 @@ newDoc docName docType docContent
 ```
 
 - **docName**: The name of the document (up to 10 characters, letters, and digits only).
-- **docType**: The type of the document (`txt`, `java`, or `html`).
+- **docType**: The type of the document (`txt`, `java`, `html` or `css`).
 - **docContent**: The content of the document as a string.
 
 **Example:**
@@ -612,3 +612,303 @@ quit
 
 ## Troubleshooting
 
+#### `newDoc` Command
+
+1. `Invalid number of arguments for newDoc command. Usage: newDoc docName docType docContent.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `newDoc myDoc txt`
+   - **Correction**: `newDoc myDoc txt "This is the content of the document"`
+
+2. `Invalid document type. Please provide a valid document type.`
+
+   - **Cause**: The `docType` provided is invalid or not recognized.
+   - **Example of Wrong Input**: `newDoc myDoc invalidType "Content"`
+   - **Correction**: `newDoc myDoc txt "Content"` (Ensure `docType` is valid, e.g., `txt`, `pdf`, etc.)
+
+3. `Invalid document content format. If the content contains spaces, please enclose it in double quotes.`
+
+   - **Cause**: The `docContent` has spaces but is not enclosed in double quotes.
+   - **Example of Wrong Input**: `newDoc myDoc txt This is content`
+   - **Correction**: `newDoc myDoc txt "This is content"`
+
+---
+
+#### `newDir` Command
+
+1. `Invalid number of arguments for newDir command. Usage: newDir dirName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `newDir`
+   - **Correction**: `newDir myDirectory`
+
+---
+
+#### `delete` Command
+
+1. `Invalid number of arguments for delete command. Usage: delete fileName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `delete`
+   - **Correction**: `delete myFile`
+
+2. `File 'fileName' does not exist.`
+
+   - **Cause**: The specified file does not exist in the current directory.
+   - **Example of Wrong Input**: `delete nonExistentFile`
+   - **Correction**: Ensure the file exists or use the correct file name, e.g., `delete existingFile`
+
+---
+
+#### `rename` Command
+
+1. `Invalid number of arguments for rename command. Usage: rename oldFileName newFileName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `rename oldName`
+   - **Correction**: `rename oldName newName`
+
+---
+
+#### `changeDir` Command
+
+1. `Invalid number of arguments for changeDir command. Usage: changeDir dirName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `changeDir`
+   - **Correction**: `changeDir myDirectory`
+
+2. `Directory 'dirName' does not exist.`
+
+   - **Cause**: The specified directory does not exist in the current directory.
+   - **Example of Wrong Input**: `changeDir nonExistentDir`
+   - **Correction**: Ensure the directory exists or use the correct directory name, e.g., `changeDir existingDir`
+
+---
+
+#### `list` Command
+
+1. `Invalid number of arguments for list command. Usage: list.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `list extraArgument`
+   - **Correction**: `list`
+
+---
+
+#### `rList` Command
+
+1. `Invalid number of arguments for rList command. Usage: rList.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `rList extraArgument`
+   - **Correction**: `rList`
+
+---
+
+#### `newSimpleCri` Command
+
+1. `Invalid number of arguments for newSimpleCri command. Usage: newSimpleCri criName attrName op val.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `newSimpleCri CN name contains`
+   - **Correction**: `newSimpleCri CN name contains "value"`
+
+2. `Invalid criterion name. Criterion names must contain exactly two English letters.`
+
+   - **Cause**: The `criName` does not meet the naming requirements.
+   - **Example of Wrong Input**: `newSimpleCri CriterionName name contains "value"`
+   - **Correction**: Use a two-letter criterion name, e.g., `newSimpleCri CN name contains "value"`
+
+3. `Invalid attribute name. Expected 'name', 'type', or 'size'.`
+
+   - **Cause**: The `attrName` is not one of the expected values.
+   - **Example of Wrong Input**: `newSimpleCri CN invalidAttr contains "value"`
+   - **Correction**: Use a valid attribute name, e.g., `newSimpleCri CN name contains "value"`
+
+4. `Invalid operator for 'name' attribute. Expected 'contains' operator.`
+
+   - **Cause**: The operator `op` is invalid for the 'name' attribute.
+   - **Example of Wrong Input**: `newSimpleCri CN name equals "value"`
+   - **Correction**: Use 'contains' operator, e.g., `newSimpleCri CN name contains "value"`
+
+5. `Invalid value for 'name' attribute. The value must be a string in double quotes.`
+
+   - **Cause**: The value `val` is not enclosed in double quotes.
+   - **Example of Wrong Input**: `newSimpleCri CN name contains value`
+   - **Correction**: `newSimpleCri CN name contains "value"`
+
+6. `Invalid operator for 'type' attribute. Expected 'equals' operator.`
+
+   - **Cause**: The operator `op` is invalid for the 'type' attribute.
+   - **Example of Wrong Input**: `newSimpleCri CT type contains "txt"`
+   - **Correction**: Use 'equals' operator, e.g., `newSimpleCri CT type equals "txt"`
+
+7. `Invalid value for 'type' attribute. The value must be a string in double quotes.`
+
+   - **Cause**: The value `val` is not enclosed in double quotes.
+   - **Example of Wrong Input**: `newSimpleCri CT type equals txt`
+   - **Correction**: `newSimpleCri CT type equals "txt"`
+
+8. `Invalid operator for 'size' attribute. Expected one of >, <, >=, <=, ==, or !=.`
+
+   - **Cause**: The operator `op` is invalid for the 'size' attribute.
+   - **Example of Wrong Input**: `newSimpleCri CS size contains 100`
+   - **Correction**: Use a valid operator, e.g., `newSimpleCri CS size >= 100`
+
+9. `Invalid value for 'size' attribute. The value must be an integer.`
+
+   - **Cause**: The `val` provided is not an integer.
+   - **Example of Wrong Input**: `newSimpleCri CS size >= "large"`
+   - **Correction**: `newSimpleCri CS size >= 100`
+
+---
+
+#### `newNegation` Command
+
+1. `Invalid number of arguments for newNegation command. Usage: newNegation criName1 criName2.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `newNegation CN`
+   - **Correction**: `newNegation CN existingCriterion`
+
+2. `Invalid criterion name. Criterion names must contain exactly two English letters.`
+
+   - **Cause**: The `criName1` does not meet the naming requirements.
+   - **Example of Wrong Input**: `newNegation CriterionName existingCriterion`
+   - **Correction**: Use a two-letter criterion name, e.g., `newNegation CN existingCriterion`
+
+3. `Criterion 'criName1' already exists.`
+
+   - **Cause**: A criterion with the name `criName1` already exists.
+   - **Example of Wrong Input**: Attempting to create `newNegation CN existingCriterion` when `CN` already exists.
+   - **Correction**: Use a unique criterion name, e.g., `newNegation CN2 existingCriterion`
+
+4. `Criterion 'criName2' does not exist.`
+
+   - **Cause**: The criterion `criName2` does not exist.
+   - **Example of Wrong Input**: `newNegation CN nonExistentCriterion`
+   - **Correction**: Ensure the criterion `criName2` exists or create it first.
+
+---
+
+#### `newBinaryCri` Command
+
+1. `Invalid number of arguments for newBinaryCri command. Usage: newBinaryCri criName1 criName3 logicOp criName4.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `newBinaryCri CN c1`
+   - **Correction**: `newBinaryCri CN c1 && c2`
+2. `Invalid logical operator. Expected '&&' or '||'.`
+
+   - **Cause**: The `logicOp` is not one of the expected values.
+   - **Example of Wrong Input**: `newBinaryCri CN c1 ^^ c2`
+   - **Correction**: Use '&&' or '||', e.g., `newBinaryCri CN c1 && c2`
+3. `Invalid criterion name. Criterion names must contain exactly two English letters.`
+
+   - **Cause**: The `criName1` does not meet the naming requirements.
+   - **Example of Wrong Input**: `newBinaryCri CriterionName c1 && c2`
+   - **Correction**: Use a two-letter criterion name, e.g., `newBinaryCri CN c1 && c2`
+
+4. `Criterion 'criName1' already exists.`
+   - **Cause**: A criterion with the name `criName1` already exists.
+   - **Example of Wrong Input**: Attempting to create `newBinaryCri CN c1 && c2` when `CN` already exists.
+   - **Correction**: Use a unique criterion name, e.g., `newBinaryCri CN2 c1 && c2`
+
+5. `One of the specified criteria does not exist.`
+
+   - **Cause**: The criteria `criName3` or `criName4` do not exist.
+   - **Example of Wrong Input**: `newBinaryCri CN nonExistentCri1 && nonExistentCri2`
+   - **Correction**: Ensure both `criName3` and `criName4` exist or create them first.
+
+---
+
+#### `printAllCriteria` Command
+
+1. `Invalid number of arguments for printAllCriteria command. Usage: printAllCriteria.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `printAllCriteria extraArgument`
+   - **Correction**: `printAllCriteria`
+
+---
+
+#### `search` Command
+
+1. `Invalid number of arguments for search command. Usage: search criName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `search`
+   - **Correction**: `search existingCriterion`
+
+2. `Criterion 'criName' does not exist.`
+
+   - **Cause**: The criterion `criName` does not exist.
+   - **Example of Wrong Input**: `search nonExistentCriterion`
+   - **Correction**: Ensure the criterion `criName` exists or create it first.
+
+---
+
+#### `rSearch` Command
+
+1. `Invalid number of arguments for rSearch command. Usage: rSearch criName.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `rSearch`
+   - **Correction**: `rSearch existingCriterion`
+
+2. `Criterion 'criName' does not exist.`
+
+   - **Cause**: The criterion `criName` does not exist.
+   - **Example of Wrong Input**: `rSearch nonExistentCriterion`
+   - **Correction**: Ensure the criterion `criName` exists or create it first.
+
+---
+
+#### `save` Command
+
+1. `Invalid number of arguments for save command. Usage: save path.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `save`
+   - **Correction**: `save /path/to/savefile`
+
+---
+
+#### `load` Command
+
+1. `Invalid number of arguments for load command. Usage: load path.`
+
+   - **Cause**: Incorrect number of arguments provided.
+   - **Example of Wrong Input**: `load`
+   - **Correction**: `load /path/to/loadfile`
+
+---
+
+#### `undo` Command
+
+1. `Invalid number of arguments for undo command. Usage: undo.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `undo extraArgument`
+   - **Correction**: `undo`
+
+---
+
+#### `redo` Command
+
+1. `Invalid number of arguments for redo command. Usage: redo.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `redo extraArgument`
+   - **Correction**: `redo`
+
+---
+
+#### `quit` Command
+
+1. `Invalid number of arguments for quit command. Usage: quit.`
+
+   - **Cause**: Additional arguments provided when none are expected.
+   - **Example of Wrong Input**: `quit extraArgument`
+   - **Correction**: `quit`

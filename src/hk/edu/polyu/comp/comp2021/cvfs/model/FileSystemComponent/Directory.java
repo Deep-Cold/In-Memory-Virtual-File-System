@@ -248,7 +248,9 @@ public class Directory implements FileSystemElement {
         System.out.println(name + " " + getSize());
     }
 
-    @Override
+    /**
+     * @return The parent directory
+     */
     public Directory getParent() {
         return parent;
     }

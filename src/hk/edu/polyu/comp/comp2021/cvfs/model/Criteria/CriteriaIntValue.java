@@ -20,9 +20,7 @@ public class CriteriaIntValue implements CriteriaValue {
         return value;
     }
     
-    public String toString(){
-        return String.valueOf(value);
-    }
+    public String toString(){return String.valueOf(value);}
 
     /**
      * @param value The value of the CriteriaValue

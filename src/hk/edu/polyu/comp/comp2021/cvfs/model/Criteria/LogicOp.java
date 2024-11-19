@@ -26,12 +26,14 @@ public enum LogicOp {
      * @return The corresponding LogicOp
      */
     public static LogicOp fromString(String value){
+        LogicOp ret = null;
         for(LogicOp op : LogicOp.values()){
             if(op.getValue().equals(value)){
-                return op;
+                ret = op;
+                break;
             }
         }
-        return null;
+        return ret;
     }
     public String toString(){
         return getValue();

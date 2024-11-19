@@ -34,9 +34,4 @@ public interface FileSystemElement {
      */
     void printInfo();
 
-    /**
-     * @return The Parent Directory
-     */
-    FileSystemElement getParent();
-    
 }

@@ -108,11 +108,6 @@ public class Document implements FileSystemElement {
     }
 
     @Override
-    public Directory getParent() {
-        return parent;
-    }
-
-    @Override
     public void setParent(FileSystemElement parent) {
         if(parent instanceof Directory)
             this.parent = (Directory) parent;
