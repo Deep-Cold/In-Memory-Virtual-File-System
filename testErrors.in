@@ -1,0 +1,14 @@
+newDisk fk
+newDisk //'
+newDisk \
+newDoc doc1 r 123\
+newDoc doc2 txt 123\
+newDoc doc3 java \/:"\
+newNegation EA EZ
+newBinaryCri EB EZ EX
+newNegation
+newDisk
+
+newDoc
+newDoc doc4 txt 123 abc
+newSimpleCri TA type "not equals" txt

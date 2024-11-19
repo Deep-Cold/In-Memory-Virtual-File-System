@@ -27,7 +27,12 @@ public class Document implements FileSystemElement {
         /**
          * html type
          */
-        html("html");
+        html("html"),
+
+        /**
+         * html type
+         */
+        css("css");
         private final String type;
         docTypes(String type) {
             this.type = type;

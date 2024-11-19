@@ -94,7 +94,12 @@ class OpNewDisk extends Operator_Base {
     public static OpNewDisk fromString(String str) {
         String[] elem = str.split(" ");
         if(elem.length != 2) errInput();
-        int siz = Integer.parseInt(elem[1]);
+        int siz = 0;
+        try{
+            siz = Integer.parseInt(elem[1]);
+        } catch (NumberFormatException e) {
+            errInput();
+        }
         if(siz < 0) errInput();
         return new OpNewDisk(Operation.newDisk, siz);
     }
@@ -442,7 +447,7 @@ class OpNewSimpleCri extends CriteriaOperator {
             case Size:
                 if(!Op.ariOp(op)) errInput();
                 for(Character x : elem[4].toCharArray()) {
-                   if(!Character.isDigit(x)) errInput();
+                    if(!Character.isDigit(x)) errInput();
                 }
                 break;
         }

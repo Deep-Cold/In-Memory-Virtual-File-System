@@ -29,4 +29,14 @@ public class OperatorBaseTest {
         }
     }
 
+    @Test
+    public void testErrors() throws Exception {
+        sc = new Scanner(new FileReader("testErrors.in"));
+        Operator_Base testOp;
+        while(sc.hasNextLine()) {
+            testOp = Operator_Base.getOperator(sc.nextLine());
+            testOp.runCommand();
+        }
+    }
+
 }
