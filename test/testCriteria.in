@@ -2,15 +2,18 @@ newSimpleCri AA name contains "txt"
 newSimpleCri AB type equals "java"
 newSimpleCri AC type equals "html"
 newSimpleCri AD type equals "txt"
+newSimpleCri AE name contains "file"
 newSimpleCri DE size <= 100
 newSimpleCri EF size > 5
 newSimpleCri FG size < 10
+newSimpleCri AZ size >= 10
 newSimpleCri GH size == 10
 newSimpleCri GI size != 10
 newNegation NA AA
 newNegation NB AB
 newNegation NC AC
 newNegation ND AD
+newNegation NE ND
 newBinaryCri BA AA || AB
 newBinaryCri BB BA && AC
 newBinaryCri BC AA && AC
@@ -19,12 +22,16 @@ newNegation NX BA
 undo
 redo
 printAllCriteria
+search AA
 search BA
+search BB
 search DE
 search EF
 search FG
 search GH
 search GI
+search AZ
+search NA
 rSearch NB
 rSearch NX
 rList

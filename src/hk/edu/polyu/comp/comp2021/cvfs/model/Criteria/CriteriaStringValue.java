@@ -17,16 +17,20 @@ public class CriteriaStringValue implements CriteriaValue {
         return value;
     }
 
-    @Override
+    /**
+     * @param value The value to be checked
+     * @return If the CriteriaValue contains value
+     */
     public boolean contains(String value){
         return this.value.contains(value);
     }
 
-    public boolean equals(Object value){
-        if(value instanceof CriteriaStringValue){
+    /**
+     * @param value The value to be checked
+     * @return If the CriteriaValue equals value
+     */
+    public boolean equals(CriteriaValue value){
             return this.value.equals(((CriteriaStringValue)value).getStringValue());
-        }
-        return false;
     }
 
     /**
@@ -40,11 +44,7 @@ public class CriteriaStringValue implements CriteriaValue {
     /**
      * @return The boxing value
      */
-    public String getStringValue(){
+    public String getStringValue() {
         return value;
-    }
-    @Override
-    public int getValue(){
-        return 0;
     }
 }

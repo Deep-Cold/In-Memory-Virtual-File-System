@@ -1,3 +1,6 @@
+list
+rList
+newDoc doc1 txt 123
 newDisk fk
 newDisk //'
 newDisk \
@@ -14,7 +17,20 @@ newNegation
 
 newDisk
 newDoc longlonglonglonglongname txt 123 content
+newDoc longlonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongnamelonglonglonglonglongname txt 123
 newDoc
+newDoc suc txt 123
+newDoc suc txt 123
+newDoc suc txt 123
 newDoc doc4 txt 123 abc
 newSimpleCri TA type "not equals" txt
 newSimpleCri TAA type "not equals" txt
+newSimpleCri TA type equals "txt"
+newSimpleCri TA type equals "txt"
+newDir dir1
+changeDir dir1
+newDoc doc1 txt 123
+newDoc doc1 txt 123
+changeDir ..
+newDir dir1
+Delete 666

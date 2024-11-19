@@ -95,8 +95,8 @@ public final class Disk {
      * @return The current working directory
      */
     public Directory getCurDir() {
-        if(curDir == null)
-            throw new IllegalArgumentException("No working directory found.");
+//        if(curDir == null)
+//            throw new IllegalArgumentException("No working directory found.");
         return curDir;
     }
 

@@ -1,0 +1,7 @@
+newDisk 114514
+newDoc nmsl java fku
+newDir name
+changeDir name
+newSimpleCri ab size >= 2
+newSimpleCri ac type equals "txt"
+newBinaryCri ba ab && ac

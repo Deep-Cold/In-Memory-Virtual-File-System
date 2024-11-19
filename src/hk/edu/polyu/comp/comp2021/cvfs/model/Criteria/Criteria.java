@@ -47,12 +47,14 @@ public class Criteria {
          * @return The corresponding Attribute.
          */
         public static AttrName fromString(String str) {
+            AttrName ret = null;
             for(AttrName attrName : AttrName.values()){
                 if(str.equals(attrName.toString())){
-                    return attrName;
+                    ret = attrName;
+                    break;
                 }
             }
-            return null;
+            return ret;
         }
     }
     private AttrName attrName;
@@ -154,6 +156,7 @@ public class Criteria {
                     sKey = CriteriaStringValue.parse(file.getType());
                     return sKey.equals(value);
                 case Size:
+                    CriteriaIntValue value = (CriteriaIntValue) this.value;
                     switch(op){
                         case sizeEqual:
                             return iKey.getValue() == value.getValue();

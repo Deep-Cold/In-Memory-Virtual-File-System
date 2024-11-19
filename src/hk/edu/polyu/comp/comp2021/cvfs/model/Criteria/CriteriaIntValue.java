@@ -13,7 +13,9 @@ public class CriteriaIntValue implements CriteriaValue {
         this.value = value;
     }
 
-    @Override
+    /**
+     * @return The value of the CriteriaValue
+     */
     public int getValue(){
         return value;
     }
@@ -38,8 +40,4 @@ public class CriteriaIntValue implements CriteriaValue {
         return new CriteriaIntValue(value);
     }
 
-    @Override
-    public boolean contains(String value){
-        return false;
-    }
 }
